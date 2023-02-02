@@ -3,10 +3,10 @@
 #include "SHA256.h"
 
 // struct constructors for different purposes:
-User::User(std::string const& _login, std::string const& _password, std::string const& _userName) : 
-		login(_login), password(_password), userName(_userName) {}
-User::User(std::string const& _login, std::string const& _password) : 
-		login(_login), password(_password) {}
+User::User(std::string const& _login, std::string const& _password, std::string const& _userName) :
+	login(_login), password(_password), userName(_userName) {}
+User::User(std::string const& _login, std::string const& _password) :
+	login(_login), password(_password) {}
 
 bool User::loginValid()
 {

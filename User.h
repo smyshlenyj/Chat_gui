@@ -23,3 +23,5 @@ public:
 	void setPassword(std::string const&);
 	void setUserName(std::string const&);
 };
+
+std::string hashPassword(const std::string&);
