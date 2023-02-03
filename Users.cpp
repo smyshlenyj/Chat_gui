@@ -61,3 +61,23 @@ bool Users::loginAndPasswordMatch(User const& _user) // check is login matching 
 
 	return false;
 }
+
+bool Users::loginAndPasswordMatch(std::string const& login, std::string const& password) // check is login matching the password
+{
+	for (auto& i : users)
+	{
+		if (i.getLogin() == login && i.getPassword() == hashPassword(password))
+			return true;
+	}
+
+	return false;
+}
+
+std::string Users::findUserNameByLogin(std::string const& login)
+{
+	for (auto& i : users)
+	{
+		if (i.getLogin() == login)
+			return i.getUserName();
+	}
+}

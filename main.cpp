@@ -10,6 +10,7 @@
 
 #include "UI.h"
 #include "User.h"
+#include "Users.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -103,10 +104,18 @@ int main(int, char**)
 	bool show_demo_window = false;
 	bool show_signUp_window = false;
 	bool show_signIn_window = false;
-	bool modalOn = false;
+	bool signUpModalWindow = false;
+	bool signInModalWindow = false;
+	static char login[64] = "";
+	static char password[64] = "";
+	static char userName[64] = "";
+	bool loggedIn = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	User user;
-	std::string a;
+	Users usersDB = Users();
+	ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoCollapse;
+	window_flags |= ImGuiWindowFlags_NoResize;
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))
@@ -131,19 +140,48 @@ int main(int, char**)
 
 		if (show_main_menu_window)
 		{
-			ImGui::Begin("Welcome to Stack, past generation messenger!"); // Create a window called "Hello, world!" and append into it.
+			ImGui::Begin("Welcome to Stack, past generation messenger!", NULL, window_flags); // Create a window called "Hello, world!" and append into it.
 
-			//  ImGui::Text("Press\n '1' for sign in\n '2' for sign up\n 'q' for exit\n");               // Display some text (you can use a format strings too)
-			if (ImGui::Button("Sign in"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-				show_signIn_window = true;
-			if (ImGui::Button("Sign up"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+			if (loggedIn == true)
 			{
-				show_signUp_window = true;
-				show_main_menu_window = false;
+				ImGui::Text("You are logged in as:");
+				ImGui::SameLine();
+				ImGui::Text(user.getLogin().c_str());
+				ImGui::Text(user.getPassword().c_str());
+				ImGui::Text(user.getUserName().c_str());
+			}
+
+			if (loggedIn == false)
+			{
+				ImGui::Text("Please sign in or sign up");
+
+				if (ImGui::Button("Sign in"))   // Buttons return true when clicked (most widgets return true when edited/activated)
+				{
+					show_signIn_window = true;
+					show_main_menu_window = false;
+				}
+			
+				if (ImGui::Button("Sign up"))   // Buttons return true when clicked (most widgets return true when edited/activated)
+				{
+					show_signUp_window = true;
+					show_main_menu_window = false;
+				}
 			}
 			ImGui::Text("");
 
-			if (modalOn)
+			if (ImGui::Button("Exit"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+				break;
+
+			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+
+		//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::End();
+		}
+
+		// 3. Show another simple window.
+		if (show_signUp_window)
+		{
+			if (signUpModalWindow)
 				ImGui::OpenPopup("Warning!");
 
 			// Always center this window when appearing
@@ -152,67 +190,63 @@ int main(int, char**)
 
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
-				if (user.getLogin() == "_all")
+				if (strcmp(login, "_all") == 0)
 					ImGui::Text("Please don't use \"_all\" as login, it is hardcoded!");
-				if (user.getPassword() == hashPassword(""))
+				if (strcmp(password, "") == 0)
 					ImGui::Text("Password cannot be empty!");
-				if (user.getLogin() == "")
+				if (strcmp(login, "") == 0)
 					ImGui::Text("Login cannot be empty!");
+				if (strcmp(userName, "") == 0)
+					ImGui::Text("User name cannot be empty!");
+				if (!usersDB.uniqueLogin(std::string(login)))
+					ImGui::Text("User %s already exists!", login);
 
 				ImGui::Separator();
 
 				if (ImGui::Button("I understand", ImVec2(120, 0)))
 				{
-					user.setLogin("");
-
-					modalOn = false;
+					signUpModalWindow = false;
 					ImGui::CloseCurrentPopup();
 				}
+
 				ImGui::SetItemDefaultFocus();
 				ImGui::EndPopup();
 			}
 
-			if (ImGui::Button("Exit"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-				break;
 
-			ImGui::Text("fffff");
-			ImGui::Text(user.getLogin().c_str());
-			ImGui::Text(user.getPassword().c_str());
-			ImGui::Text("fffff");
+			ImGui::Begin("Sign up", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 
-			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-
-			//tempUser.getLogin()
-		   // ImGui::SameLine();
-
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-			ImGui::End();
-		}
-
-		// 3. Show another simple window.
-		if (show_signUp_window)
-		{
-
-			ImGui::Begin("Sign up", &show_signUp_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-
-			ImGui::Text("Login:   ");
+			ImGui::Text("Login:    ");
 			ImGui::SameLine();
-			static char login[64] = "";
 			ImGui::InputText("##login", login, 64);
 
-			ImGui::Text("Password:");
+			ImGui::Text("Password: ");
 			ImGui::SameLine();
-			static char password[64] = "";
 			ImGui::InputText("##password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
+
+			ImGui::Text("User name:");
+			ImGui::SameLine();
+			ImGui::InputText("##userName", userName, 64);
 
 			if (ImGui::Button("Create user"))
 			{
-				user.setLogin(login);
-				user.setPassword(password);
-				if (user.getLogin() == "_all" || user.getLogin() == "" || user.getPassword() == hashPassword(""))
-					modalOn = true;
+				if (strcmp(login, "_all") == 0	|| 
+					strcmp(login, "")	  == 0	|| 
+					strcmp(password, "")  == 0	|| 
+					strcmp(userName, "")  == 0 	|| 
+					!usersDB.uniqueLogin(std::string(login)))
+					signUpModalWindow = true;
 				else
 				{
+					user.setLogin(login);
+					user.setPassword(password);
+					user.setUserName(userName);
+					loggedIn = true;
+
+					std::ofstream out("users.mdf", std::ios::app); // add user record to data base
+					if (out.is_open())
+						out << user.getLogin() + "\t" + user.getPassword() + "\t" + user.getUserName() << std::endl;  //add new user to file
+
 					show_main_menu_window = true;
 					show_signUp_window = false;
 				}
@@ -229,22 +263,67 @@ int main(int, char**)
 
 		if (show_signIn_window)
 		{
-			ImGui::Begin("Sign in", &show_signIn_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			if (signInModalWindow)
+				ImGui::OpenPopup("Warning!");
 
-			ImGui::Text("Login:   ");
+			// Always center this window when appearing
+			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				if (strcmp(password, "") == 0)
+					ImGui::Text("Password cannot be empty!");
+				if (strcmp(login, "") == 0)
+					ImGui::Text("Login cannot be empty!");
+				if (!usersDB.loginAndPasswordMatch(login, password))
+						ImGui::Text("Error. No such login + password combination!");
+
+				ImGui::Separator();
+
+				if (ImGui::Button("I understand", ImVec2(120, 0)))
+				{
+					signInModalWindow = false;
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::SetItemDefaultFocus();
+				ImGui::EndPopup();
+			}
+
+			ImGui::Begin("Sign in", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+
+			ImGui::Text("Login:    ");
 			ImGui::SameLine();
-			static char login[64] = "";
 			ImGui::InputText("##login", login, 64);
 
-			ImGui::Text("Password:");
+			ImGui::Text("Password: ");
 			ImGui::SameLine();
-			static char password[64] = "";
 			ImGui::InputText("##password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
 
 			if (ImGui::Button("Sign in"))
-				show_signIn_window = false;
+			{
+					if (strcmp(login, "_all") == 0 ||
+						strcmp(login, "") == 0 ||
+						strcmp(password, "") == 0 ||
+						!usersDB.loginAndPasswordMatch(login, password))
+					signInModalWindow = true;
+				else
+				{
+					user.setLogin(login);
+					user.setPassword(password);
+					user.setUserName(usersDB.findUserNameByLogin(login));
+					loggedIn = true;
+					show_signIn_window = false;
+					show_main_menu_window = true;
+				}
+			}
+				
 			if (ImGui::Button("Exit to main menu"))
+			{
 				show_signIn_window = false;
+				show_main_menu_window = true;
+			}
 
 			ImGui::End();
 		}
