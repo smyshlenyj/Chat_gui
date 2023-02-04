@@ -104,6 +104,7 @@ int main(int, char**)
 	bool show_demo_window = false;
 	bool show_signUp_window = false;
 	bool show_signIn_window = false;
+	bool show_users_window = false;
 	bool signUpModalWindow = false;
 	bool signInModalWindow = false;
 	static char login[64] = "";
@@ -111,11 +112,15 @@ int main(int, char**)
 	static char userName[64] = "";
 	bool loggedIn = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	ImVec2 windowSize = ImVec2(400.0f, 220.0f);
 	User user;
 	Users usersDB = Users();
 	ImGuiWindowFlags window_flags = 0;
 	window_flags |= ImGuiWindowFlags_NoCollapse;
 	window_flags |= ImGuiWindowFlags_NoResize;
+	window_flags |= ImGuiWindowFlags_NoMove;
+
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
 	// Main loop
 	while (!glfwWindowShouldClose(window))
@@ -140,7 +145,11 @@ int main(int, char**)
 
 		if (show_main_menu_window)
 		{
-			ImGui::Begin("Welcome to Stack, past generation messenger!", NULL, window_flags); // Create a window called "Hello, world!" and append into it.
+			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::SetNextWindowSize(windowSize, ImGuiCond_None);
+			ImGui::Begin("Main menu", NULL, window_flags); // Create a window called "Hello, world!" and append into it.
+			ImGui::Text("Welcome to Stack, past generation messenger!");
+			ImGui::Text("");
 
 			if (loggedIn == true)
 			{
@@ -153,14 +162,15 @@ int main(int, char**)
 
 			if (loggedIn == false)
 			{
-				ImGui::Text("Please sign in or sign up");
+				ImGui::Text("Please sign in or sign up:");
+				ImGui::Text("");
 
 				if (ImGui::Button("Sign in"))   // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
 					show_signIn_window = true;
 					show_main_menu_window = false;
 				}
-			
+
 				if (ImGui::Button("Sign up"))   // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
 					show_signUp_window = true;
@@ -174,18 +184,16 @@ int main(int, char**)
 
 			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
 
-		//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
 		}
 
-		// 3. Show another simple window.
 		if (show_signUp_window)
 		{
 			if (signUpModalWindow)
 				ImGui::OpenPopup("Warning!");
 
-			// Always center this window when appearing
-			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+			// Always center this window when appearin
 			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
@@ -213,6 +221,8 @@ int main(int, char**)
 				ImGui::EndPopup();
 			}
 
+			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::SetNextWindowSize(windowSize, ImGuiCond_None);
 
 			ImGui::Begin("Sign up", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 
@@ -228,12 +238,14 @@ int main(int, char**)
 			ImGui::SameLine();
 			ImGui::InputText("##userName", userName, 64);
 
+			ImGui::Text("");
+
 			if (ImGui::Button("Create user"))
 			{
-				if (strcmp(login, "_all") == 0	|| 
-					strcmp(login, "")	  == 0	|| 
-					strcmp(password, "")  == 0	|| 
-					strcmp(userName, "")  == 0 	|| 
+				if (strcmp(login, "_all") == 0 ||
+					strcmp(login, "") == 0 ||
+					strcmp(password, "") == 0 ||
+					strcmp(userName, "") == 0 ||
 					!usersDB.uniqueLogin(std::string(login)))
 					signUpModalWindow = true;
 				else
@@ -267,8 +279,6 @@ int main(int, char**)
 				ImGui::OpenPopup("Warning!");
 
 			// Always center this window when appearing
-			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
@@ -277,7 +287,7 @@ int main(int, char**)
 				if (strcmp(login, "") == 0)
 					ImGui::Text("Login cannot be empty!");
 				if (!usersDB.loginAndPasswordMatch(login, password))
-						ImGui::Text("Error. No such login + password combination!");
+					ImGui::Text("Error. No such login + password combination!");
 
 				ImGui::Separator();
 
@@ -291,6 +301,9 @@ int main(int, char**)
 				ImGui::EndPopup();
 			}
 
+			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::SetNextWindowSize(windowSize, ImGuiCond_None);
+
 			ImGui::Begin("Sign in", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 
 			ImGui::Text("Login:    ");
@@ -301,12 +314,14 @@ int main(int, char**)
 			ImGui::SameLine();
 			ImGui::InputText("##password", password, IM_ARRAYSIZE(password), ImGuiInputTextFlags_Password);
 
+			ImGui::Text("");
+
 			if (ImGui::Button("Sign in"))
 			{
-					if (strcmp(login, "_all") == 0 ||
-						strcmp(login, "") == 0 ||
-						strcmp(password, "") == 0 ||
-						!usersDB.loginAndPasswordMatch(login, password))
+				if (strcmp(login, "_all") == 0 ||
+					strcmp(login, "") == 0 ||
+					strcmp(password, "") == 0 ||
+					!usersDB.loginAndPasswordMatch(login, password))
 					signInModalWindow = true;
 				else
 				{
@@ -315,10 +330,10 @@ int main(int, char**)
 					user.setUserName(usersDB.findUserNameByLogin(login));
 					loggedIn = true;
 					show_signIn_window = false;
-					show_main_menu_window = true;
+					show_users_window = true;
 				}
 			}
-				
+
 			if (ImGui::Button("Exit to main menu"))
 			{
 				show_signIn_window = false;
@@ -327,6 +342,31 @@ int main(int, char**)
 
 			ImGui::End();
 		}
+
+		if (show_users_window)
+		{
+
+			ImGui::Begin("Messages");   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Text("*******************************************************************************************");
+
+			const char kkk[20] = "kk5555555555555555k";
+			for (int i = 0; i < 7; i++)
+			{
+				if (i > 0)
+					ImGui::SameLine();
+				ImGui::PushID(i);
+				ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, 0.6f, 0.6f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.7f, 0.7f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, 0.8f, 0.8f));
+				ImGui::Button(kkk);
+				ImGui::PopStyleColor(3);
+				ImGui::PopID();
+			}
+
+			ImGui::End();
+		}
+
+
 		// Rendering
 		ImGui::Render();
 		int display_w, display_h;
