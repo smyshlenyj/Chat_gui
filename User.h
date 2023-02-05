@@ -10,6 +10,7 @@ public:
 	// struct constructors for different purposes:
 	User(std::string const&, std::string const&, std::string const&);
 	User(std::string const&, std::string const&);
+	User(std::string const&);
 	User() {}
 
 	bool loginValid();

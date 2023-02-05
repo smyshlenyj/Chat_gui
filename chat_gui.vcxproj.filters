@@ -63,6 +63,9 @@
     <ClCompile Include="LoadImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="stbi\stb_image.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vars.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

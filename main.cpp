@@ -1,30 +1,8 @@
-// Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
-// (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
-// Read online: https://github.com/ocornut/imgui/tree/master/docs
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <iostream>
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include <stdio.h>
+#include "vars.h"
 
-#include "LoadImage.h"
-
-#include "UI.h"
-#include "User.h"
-#include "Users.h"
-
-#define GL_SILENCE_DEPRECATION
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <GLES2/gl2.h>
-#endif
-#include <GLFW/glfw3.h> // Will drag system OpenGL headers
-
-// [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
-// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
-// Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
 #if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
@@ -88,36 +66,12 @@ int main(int, char**)
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-	// Load Fonts
-	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-	// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-	// - Read 'docs/FONTS.md' for more instructions and details.
-	// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-	//io.Fonts->AddFontDefault();
-	//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-	//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-	//IM_ASSERT(font != NULL);
 
-	// Our state
-	bool show_main_menu_window = true;
-	bool show_demo_window = false;
-	bool show_signUp_window = false;
-	bool show_signIn_window = false;
-	bool show_users_window = false;
-	bool show_message_window = false;
-	bool signUpModalWindow = false;
-	bool signInModalWindow = false;
+
 	static char login[64] = "";
 	static char password[64] = "";
 	static char userName[64] = "";
 	static char message[256] = "";
-	bool loggedIn = false;
 
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	ImVec2 windowSize = ImVec2(400.0f, 220.0f);
@@ -136,10 +90,16 @@ int main(int, char**)
 	message_window_flags |= ImGuiWindowFlags_NoResize;
 	message_window_flags |= ImGuiWindowFlags_NoMove;
 
-	int my_image_width = 60;
-	int my_image_height = 60;
+	int avatar_image_width = 60;
+	int avatar_image_height = 60;
 	GLuint my_image_texture = 0;
-	bool ret = LoadTextureFromFile("avatar.jpg", &my_image_texture, &my_image_width, &my_image_height);
+	bool ret = LoadTextureFromFile("avatar.jpg", &my_image_texture, &avatar_image_width, &avatar_image_height);
+	IM_ASSERT(ret);
+
+	int background_image_width = 1280;
+	int background_image_height = 720;
+	GLuint background_texture = 0;
+	ret = LoadTextureFromFile("background.jpg", &background_texture, &background_image_width, &background_image_height);
 	IM_ASSERT(ret);
 
 	const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
@@ -148,8 +108,9 @@ int main(int, char**)
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
 	// Main loop
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window) && programAlive)
 	{
+
 		// Poll and handle events (inputs, window resize, etc.)
 		// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
 		// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
@@ -168,6 +129,24 @@ int main(int, char**)
 
 		// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
 
+		auto MAIN_WINDOW = ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoBringToFrontOnFocus |
+			ImGuiWindowFlags_NoInputs |
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoScrollbar;
+
+		glfwGetWindowSize(window, &background_image_width, &background_image_height);
+		ImVec2 size(background_image_width, background_image_height);
+		ImGui::SetNextWindowPos(ImVec2());
+		ImGui::SetNextWindowSize(size);
+		if (ImGui::Begin("1", nullptr, MAIN_WINDOW)) {
+			ImGui::Image((void*)(intptr_t)background_texture, ImVec2(background_image_width, background_image_height));
+			ImGui::End();
+		}
+
+
 		if (show_main_menu_window)
 		{
 			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
@@ -181,8 +160,8 @@ int main(int, char**)
 				ImGui::Text("You are logged in as:");
 				ImGui::SameLine();
 				ImGui::Text(user.getLogin().c_str());
-				ImGui::Text(user.getPassword().c_str());
-				ImGui::Text(user.getUserName().c_str());
+				//ImGui::Text(user.getPassword().c_str());
+				//ImGui::Text(user.getUserName().c_str());
 
 				if (ImGui::Button("Back to messages"))   // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
@@ -190,6 +169,15 @@ int main(int, char**)
 					show_main_menu_window = false;
 					show_users_window = true;
 					show_message_window = true;
+				}
+
+				if (ImGui::Button("Sign out"))   // Buttons return true when clicked (most widgets return true when edited/activated)
+				{
+					loggedIn = false;
+					show_signIn_window = false;
+					show_main_menu_window = true;
+					show_users_window = false;
+					show_message_window = false;
 				}
 			}
 
@@ -213,7 +201,7 @@ int main(int, char**)
 			ImGui::Text("");
 
 			if (ImGui::Button("Exit"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-				break;
+				programAlive = false;
 
 			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
 
@@ -227,7 +215,7 @@ int main(int, char**)
 				ImGui::OpenPopup("Warning!");
 
 			// Always center this window when appearin
-			ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
@@ -295,6 +283,11 @@ int main(int, char**)
 					show_users_window = true;
 					//show_message_window = true;
 					show_signUp_window = false;
+
+					// Clear the buffer
+					strncpy(login, "", 64);
+					strncpy(password, "", 64);
+					strncpy(userName, "", 64);
 				}
 			}
 
@@ -314,7 +307,7 @@ int main(int, char**)
 
 			// Always center this window when appearing
 			//ImGui::SetNextWindowPos(main_viewport->Pos);
-			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
 				if (strcmp(password, "") == 0)
@@ -366,6 +359,10 @@ int main(int, char**)
 					loggedIn = true;
 					show_signIn_window = false;
 					show_users_window = true;
+
+					// Clear the buffer
+					strncpy(login, "", 64);
+					strncpy(password, "", 64);
 				}
 			}
 
@@ -388,6 +385,19 @@ int main(int, char**)
 
 			Users usersDB = Users();
 
+			ImGui::PushID(0);
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(22, 21, 23));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor(200, 200, 200));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor(200, 200, 200));
+			if (ImGui::Button("PUBLIC GROUP"))
+			{
+				User groupUser("_all");
+				selectedRecepient = groupUser;
+				show_message_window = true;
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::PopID();
+
 			int i = 0;
 			for (auto element : usersDB.listOfUsers())
 			{
@@ -408,6 +418,7 @@ int main(int, char**)
 				}
 			}
 
+
 			ImGui::Text("");
 			if (ImGui::Button("Exit to main menu"))
 			{
@@ -424,12 +435,15 @@ int main(int, char**)
 		{
 			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
 			ImGui::SetNextWindowPos(ImVec2(500.0f, 0.0f), ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			//ImGui::Image((void*)(intptr_t)background_texture, ImVec2(520, 300));
 			ImGui::Begin("Messages", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-			ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(my_image_width, my_image_height));
+
+			ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(avatar_image_width, avatar_image_height));
 			ImGui::SameLine();
 			ImGui::Text(selectedRecepient.getLogin().c_str());
 			ImGui::Text("");
 			ImGui::Separator();
+			ImGui::BeginChild("ChildL", ImVec2(ImGui::GetContentRegionAvail().x * 1.0f, 500), false, window_flags);
 
 			Chat currentChat = Chat(user.getLogin(), selectedRecepient.getLogin());
 			for (auto const& i : currentChat.listOfMessages())
@@ -437,10 +451,13 @@ int main(int, char**)
 				ImGui::TextWrapped(i.c_str());
 			}
 
+
+			ImGui::EndChild();
+			ImGui::Separator();
 			ImGui::Text("");
 			ImGui::Text("Input your message: ");
 			ImGui::SameLine();
-			ImGui::InputText("##message", message, 256);
+			ImGui::InputText("##message", message, 256, ImGuiInputTextFlags_AlwaysOverwrite);
 			ImGui::Text("");
 			if (ImGui::Button("Send msg"))
 			{
@@ -448,7 +465,10 @@ int main(int, char**)
 				{
 					Message reply = Message(user.getLogin(), selectedRecepient.getLogin(), message);
 					reply.sendMessage();
-					user.setLogin(login);
+					//user.setLogin(login);
+
+					// Clear the buffer
+					strncpy(message, "", 256);
 				}
 			}
 
