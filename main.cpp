@@ -10,6 +10,8 @@
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 
+#include "LoadImage.h"
+
 #include "UI.h"
 #include "User.h"
 #include "Users.h"
@@ -119,8 +121,8 @@ int main(int, char**)
 
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	ImVec2 windowSize = ImVec2(400.0f, 220.0f);
-	ImVec2 usersWindowSize = ImVec2(500.0f, 800.0f);
-	ImVec2 messagesWindowSize = ImVec2(500.0f, 800.0f);
+	ImVec2 usersWindowSize = ImVec2(500.0f, 720.0f);
+	ImVec2 messagesWindowSize = ImVec2(500.0f, 720.0f);
 	User user;
 	User selectedRecepient;
 	Users usersDB = Users();
@@ -128,6 +130,17 @@ int main(int, char**)
 	window_flags |= ImGuiWindowFlags_NoCollapse;
 	window_flags |= ImGuiWindowFlags_NoResize;
 	window_flags |= ImGuiWindowFlags_NoMove;
+
+	ImGuiWindowFlags message_window_flags = 0;
+	message_window_flags |= ImGuiWindowFlags_NoCollapse;
+	message_window_flags |= ImGuiWindowFlags_NoResize;
+	message_window_flags |= ImGuiWindowFlags_NoMove;
+
+	int my_image_width = 60;
+	int my_image_height = 60;
+	GLuint my_image_texture = 0;
+	bool ret = LoadTextureFromFile("avatar.jpg", &my_image_texture, &my_image_width, &my_image_height);
+	IM_ASSERT(ret);
 
 	const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
 
@@ -412,6 +425,8 @@ int main(int, char**)
 			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
 			ImGui::SetNextWindowPos(ImVec2(500.0f, 0.0f), ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::Begin("Messages", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(my_image_width, my_image_height));
+			ImGui::SameLine();
 			ImGui::Text(selectedRecepient.getLogin().c_str());
 			ImGui::Text("");
 			ImGui::Separator();
