@@ -42,3 +42,8 @@ void Chat::printChat() // just prints all messages in Chat object
 		std::cout << i << std::endl;
 	}
 }
+
+std::list<std::string> Chat::listOfMessages()
+{
+	return buffer;
+}

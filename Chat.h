@@ -13,4 +13,5 @@ public:
 	Chat(std::string const&, std::string const&); // universal chat constructor
 
 	void printChat(); // just prints all messages in Chat object
+	std::list<std::string> listOfMessages();
 };

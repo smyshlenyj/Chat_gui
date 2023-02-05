@@ -51,6 +51,11 @@ void Users::printUsers() // just prints all user names and logins
 		std::cout << "User: " << i.getLogin() << ",\t\t Name: " << i.getUserName() << '\n';
 }
 
+std::vector<User> Users::listOfUsers() // just prints all user names and logins
+{
+	return users;
+}
+
 bool Users::loginAndPasswordMatch(User const& _user) // check is login matching the password
 {
 	for (auto& i : users)

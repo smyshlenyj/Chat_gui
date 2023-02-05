@@ -167,6 +167,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="SHA256.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Trienode.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="User.h" />

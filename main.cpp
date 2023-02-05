@@ -2,6 +2,8 @@
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <iostream>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -30,6 +32,7 @@ static void glfw_error_callback(int error, const char* description)
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 #define IMGUI_DEMO_MARKER(section)  do { if (GImGuiDemoMarkerCallback != NULL) GImGuiDemoMarkerCallback(__FILE__, __LINE__, section, GImGuiDemoMarkerCallbackUserData); } while (0)
+
 
 int main(int, char**)
 {
@@ -105,21 +108,30 @@ int main(int, char**)
 	bool show_signUp_window = false;
 	bool show_signIn_window = false;
 	bool show_users_window = false;
+	bool show_message_window = false;
 	bool signUpModalWindow = false;
 	bool signInModalWindow = false;
 	static char login[64] = "";
 	static char password[64] = "";
 	static char userName[64] = "";
+	static char message[256] = "";
 	bool loggedIn = false;
+
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	ImVec2 windowSize = ImVec2(400.0f, 220.0f);
+	ImVec2 usersWindowSize = ImVec2(500.0f, 800.0f);
+	ImVec2 messagesWindowSize = ImVec2(500.0f, 800.0f);
 	User user;
+	User selectedRecepient;
 	Users usersDB = Users();
 	ImGuiWindowFlags window_flags = 0;
 	window_flags |= ImGuiWindowFlags_NoCollapse;
 	window_flags |= ImGuiWindowFlags_NoResize;
 	window_flags |= ImGuiWindowFlags_NoMove;
 
+	const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
+
+	ImVec2 topLeft = ImVec2(0.0f, 0.0f);
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
 	// Main loop
@@ -145,7 +157,7 @@ int main(int, char**)
 
 		if (show_main_menu_window)
 		{
-			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::SetNextWindowSize(windowSize, ImGuiCond_None);
 			ImGui::Begin("Main menu", NULL, window_flags); // Create a window called "Hello, world!" and append into it.
 			ImGui::Text("Welcome to Stack, past generation messenger!");
@@ -158,6 +170,14 @@ int main(int, char**)
 				ImGui::Text(user.getLogin().c_str());
 				ImGui::Text(user.getPassword().c_str());
 				ImGui::Text(user.getUserName().c_str());
+
+				if (ImGui::Button("Back to messages"))   // Buttons return true when clicked (most widgets return true when edited/activated)
+				{
+					show_signIn_window = false;
+					show_main_menu_window = false;
+					show_users_window = true;
+					show_message_window = true;
+				}
 			}
 
 			if (loggedIn == false)
@@ -194,7 +214,7 @@ int main(int, char**)
 				ImGui::OpenPopup("Warning!");
 
 			// Always center this window when appearin
-			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+			ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
@@ -221,7 +241,7 @@ int main(int, char**)
 				ImGui::EndPopup();
 			}
 
-			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::SetNextWindowSize(windowSize, ImGuiCond_None);
 
 			ImGui::Begin("Sign up", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
@@ -259,7 +279,8 @@ int main(int, char**)
 					if (out.is_open())
 						out << user.getLogin() + "\t" + user.getPassword() + "\t" + user.getUserName() << std::endl;  //add new user to file
 
-					show_main_menu_window = true;
+					show_users_window = true;
+					//show_message_window = true;
 					show_signUp_window = false;
 				}
 			}
@@ -279,7 +300,8 @@ int main(int, char**)
 				ImGui::OpenPopup("Warning!");
 
 			// Always center this window when appearing
-
+			//ImGui::SetNextWindowPos(main_viewport->Pos);
+			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
 				if (strcmp(password, "") == 0)
@@ -301,7 +323,7 @@ int main(int, char**)
 				ImGui::EndPopup();
 			}
 
-			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::SetNextWindowSize(windowSize, ImGuiCond_None);
 
 			ImGui::Begin("Sign in", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
@@ -345,22 +367,74 @@ int main(int, char**)
 
 		if (show_users_window)
 		{
+			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
+			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::Begin("Users", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Text("Registered users:");
+			ImGui::Text("");
 
-			ImGui::Begin("Messages");   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-			ImGui::Text("*******************************************************************************************");
+			Users usersDB = Users();
 
-			const char kkk[20] = "kk5555555555555555k";
-			for (int i = 0; i < 7; i++)
+			int i = 0;
+			for (auto element : usersDB.listOfUsers())
 			{
-				if (i > 0)
-					ImGui::SameLine();
-				ImGui::PushID(i);
-				ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, 0.6f, 0.6f));
-				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.7f, 0.7f));
-				ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, 0.8f, 0.8f));
-				ImGui::Button(kkk);
-				ImGui::PopStyleColor(3);
-				ImGui::PopID();
+				if (user.getLogin() != element.getLogin())
+				{
+					ImGui::PushID(i);
+					ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(22, 21, 23));
+					ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor(200, 200, 200));
+					ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor(200, 200, 200));
+					if (ImGui::Button(element.getLogin().c_str()))
+					{
+						selectedRecepient = element;
+						show_message_window = true;
+					}
+					ImGui::PopStyleColor(3);
+					ImGui::PopID();
+					++i;
+				}
+			}
+
+			ImGui::Text("");
+			if (ImGui::Button("Exit to main menu"))
+			{
+				//selectedRecepient = User();
+				show_users_window = false;
+				show_message_window = false;
+				show_main_menu_window = true;
+			}
+
+			ImGui::End();
+		}
+
+		if (show_message_window)
+		{
+			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
+			ImGui::SetNextWindowPos(ImVec2(500.0f, 0.0f), ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
+			ImGui::Begin("Messages", NULL, window_flags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Text(selectedRecepient.getLogin().c_str());
+			ImGui::Text("");
+			ImGui::Separator();
+
+			Chat currentChat = Chat(user.getLogin(), selectedRecepient.getLogin());
+			for (auto const& i : currentChat.listOfMessages())
+			{
+				ImGui::TextWrapped(i.c_str());
+			}
+
+			ImGui::Text("");
+			ImGui::Text("Input your message: ");
+			ImGui::SameLine();
+			ImGui::InputText("##message", message, 256);
+			ImGui::Text("");
+			if (ImGui::Button("Send msg"))
+			{
+				if (strcmp(message, "") != 0)
+				{
+					Message reply = Message(user.getLogin(), selectedRecepient.getLogin(), message);
+					reply.sendMessage();
+					user.setLogin(login);
+				}
 			}
 
 			ImGui::End();
