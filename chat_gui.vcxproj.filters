@@ -98,7 +98,7 @@
     <ClInclude Include="SHA256.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Trienode.h">
+    <ClInclude Include="TrieNode.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
