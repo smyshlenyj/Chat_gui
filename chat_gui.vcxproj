@@ -154,7 +154,6 @@
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="Users.cpp" />
-    <ClCompile Include="vars.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chat.h" />
@@ -175,7 +174,6 @@
     <ClInclude Include="UI.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Users.h" />
-    <ClInclude Include="vars.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="messages.mdf" />

@@ -1,4 +1,3 @@
-#pragma once
 #include "stbi/stb_image.h"
 #include <iostream>
 

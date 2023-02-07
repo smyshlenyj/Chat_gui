@@ -11,7 +11,7 @@ public:
 	User(std::string const&, std::string const&, std::string const&);
 	User(std::string const&, std::string const&);
 	User(std::string const&);
-	User() {}
+	User() = default;
 
 	bool loginValid();
 	bool passwordValid(std::string const&);

@@ -86,3 +86,10 @@ std::string Users::findUserNameByLogin(std::string const& login)
 			return i.getUserName();
 	}
 }
+
+void Users::addUser(User const& user)
+{
+	std::ofstream out("users.mdf", std::ios::app); // add user record to data base
+	if (out.is_open())
+		out << user.getLogin() + "\t" + user.getPassword() + "\t" + user.getUserName() << std::endl;  //add new user to file
+}
