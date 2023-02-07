@@ -176,6 +176,7 @@
     <ClInclude Include="Users.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="messages.mdf" />
     <None Include="users.mdf" />
   </ItemGroup>

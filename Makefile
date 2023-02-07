@@ -14,9 +14,9 @@
 #CXX = g++
 #CXX = clang++
 
-EXE = chat_gui
+EXE = stackmessenger
 IMGUI_DIR = imgui
-SOURCES = main.cpp Chat.cpp LoadImage.cpp Message.cpp SHA256.cpp TrieNode.cpp UI.cpp User.cpp Users.cpp vars.cpp
+SOURCES = main.cpp Chat.cpp LoadImage.cpp Message.cpp SHA256.cpp TrieNode.cpp UI.cpp User.cpp Users.cpp
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_glfw.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
@@ -86,4 +86,9 @@ $(EXE): $(OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 clean:
-	rm -f $(EXE) $(OBJS)
+	rm -f $(OBJS)	
+
+install:
+			install ./stackmessenger /usr/local/bin
+uninstall:
+			rm -rf /usr/local/bin/stackmessenger

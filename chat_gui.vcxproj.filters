@@ -127,5 +127,8 @@
     <None Include="users.mdf">
       <Filter>Source Files</Filter>
     </None>
+    <None Include=".gitignore">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

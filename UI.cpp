@@ -160,6 +160,7 @@ int UI(int, char**)
 				ImGui::SameLine();
 				ImGui::Text(user.getLogin().c_str());
 
+
 				if (ImGui::Button("Back to messages"))   // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
 					showSignInWindow = false;
