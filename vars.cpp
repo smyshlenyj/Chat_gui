@@ -1,16 +1,6 @@
 #include "vars.h"
 
-bool programAlive = true;
-bool show_main_menu_window = true;
-bool show_demo_window = false;
-bool show_signUp_window = false;
-bool show_signIn_window = false;
-bool show_users_window = false;
-bool show_message_window = false;
-bool signUpModalWindow = false;
-bool signInModalWindow = false;
 
-bool loggedIn = false;
 
 //ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 //ImVec2 windowSize = ImVec2(400.0f, 220.0f);

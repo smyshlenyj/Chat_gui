@@ -148,7 +148,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="LoadImage.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Makefile" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="SHA256.cpp" />
     <ClCompile Include="TrieNode.cpp" />

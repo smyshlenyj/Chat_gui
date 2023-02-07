@@ -1,7 +1,27 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <iostream>
-#include "vars.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include <stdio.h>
+
+#include "LoadImage.h"
+#include "Chat.h"
+#include "Message.h"
+#include "User.h"
+#include "Users.h"
+#include "UI.h"
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
+#pragma comment(lib, "legacy_stdio_definitions")
+#endif
+
+#define GL_SILENCE_DEPRECATION
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+#include <GLES2/gl2.h>
+#endif
+#include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
 #pragma comment(lib, "legacy_stdio_definitions")
@@ -14,7 +34,7 @@ static void glfw_error_callback(int error, const char* description)
 #define IMGUI_DEMO_MARKER(section)  do { if (GImGuiDemoMarkerCallback != NULL) GImGuiDemoMarkerCallback(__FILE__, __LINE__, section, GImGuiDemoMarkerCallbackUserData); } while (0)
 
 
-int main(int, char**)
+int UI(int, char**)
 {
 	// Setup window
 	glfwSetErrorCallback(glfw_error_callback);
@@ -66,7 +86,22 @@ int main(int, char**)
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
+	GLFWimage images[1];
+	images[0].pixels = stbi_load("ico.png", &images[0].width, &images[0].height, 0, 4); //rgba channels 
+	glfwSetWindowIcon(window, 1, images);
+	stbi_image_free(images[0].pixels);
 
+	bool programAlive = true;
+	bool show_main_menu_window = true;
+	bool show_demo_window = false;
+	bool show_signUp_window = false;
+	bool show_signIn_window = false;
+	bool show_users_window = false;
+	bool show_message_window = false;
+	bool signUpModalWindow = false;
+	bool signInModalWindow = false;
+
+	bool loggedIn = false;
 
 	static char login[64] = "";
 	static char password[64] = "";
@@ -497,4 +532,9 @@ int main(int, char**)
 	glfwTerminate();
 
 	return 0;
+}
+
+int main(int a, char** b)
+{
+	return UI(a, b);
 }
