@@ -23,7 +23,7 @@ OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 LINUX_GL_LIBS = -lGL
 
-CXXFLAGS = -std=c++14 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
+CXXFLAGS = -std=c++17 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
 CXXFLAGS += -g -Wall -Wformat
 LIBS =
 
@@ -89,6 +89,9 @@ clean:
 	rm -f $(OBJS)	
 
 install:
-			install ./stackmessenger /usr/local/bin
+			mkdir -p ~/.stackmessenger
+			cp users.mdf messages.mdf ico.png avatar.jpg background.jpg ~/.stackmessenger
+			sudo install ./stackmessenger /usr/local/bin
 uninstall:
-			rm -rf /usr/local/bin/stackmessenger
+			sudo rm -rf /usr/local/bin/stackmessenger
+			rm -rf ~/.stackmessenger

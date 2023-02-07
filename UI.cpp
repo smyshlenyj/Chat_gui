@@ -1,3 +1,4 @@
+#include <filesystem>
 #include "UI.h"
 #include "Users.h"
 
@@ -58,10 +59,21 @@ int UI(int, char**)
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	GLFWimage images[1];
 	images[0].pixels = stbi_load("ico.png", &images[0].width, &images[0].height, 0, 4); //rgba channels 
 	glfwSetWindowIcon(window, 1, images);
 	stbi_image_free(images[0].pixels);
+#endif
+
+#ifdef __linux__
+	std::string home = getenv("HOME");
+	std::string path = home + "/.stackmessenger/ico.png";
+	GLFWimage images[1];
+	images[0].pixels = stbi_load(path.c_str(), &images[0].width, &images[0].height, 0, 4); //rgba channels 
+	glfwSetWindowIcon(window, 1, images);
+	stbi_image_free(images[0].pixels);
+#endif
 
 	bool programAlive = true;
 	bool showMainMenuWindow = true;
@@ -100,14 +112,51 @@ int UI(int, char**)
 	int avatarImageWidth = 60;
 	int avatarImageHeight = 60;
 	GLuint avatarImageTexture = 0;
-	bool ret = LoadTextureFromFile("avatar.jpg", &avatarImageTexture, &avatarImageWidth, &avatarImageHeight);
+
+	bool ret = false;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	ret = LoadTextureFromFile("avatar.jpg", &avatarImageTexture, &avatarImageWidth, &avatarImageHeight);
 	IM_ASSERT(ret);
+#endif
+
+#ifdef __linux__
+	std::filesystem::path stackPath{ home + "/.stackmessenger" };
+	if (std::filesystem::exists(stackPath))
+	{
+		std::string pathToAvatar = home + "/.stackmessenger/avatar.jpg";
+		ret = LoadTextureFromFile(pathToAvatar.c_str(), &avatarImageTexture, &avatarImageWidth, &avatarImageHeight);
+		IM_ASSERT(ret);
+	}
+	else
+	{
+		ret = LoadTextureFromFile("avatar.jpg", &avatarImageTexture, &avatarImageWidth, &avatarImageHeight);
+		IM_ASSERT(ret);
+	}
+#endif
+
 
 	int backgroundImageWidth = 1280;
 	int backgroundImageHeight = 720;
 	GLuint backgroundTexture = 0;
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	ret = LoadTextureFromFile("background.jpg", &backgroundTexture, &backgroundImageWidth, &backgroundImageHeight);
 	IM_ASSERT(ret);
+#endif
+
+#ifdef __linux__
+	if (std::filesystem::exists(stackPath))
+	{
+		std::string pathToBackground = home + "/.stackmessenger/background.jpg";
+		ret = LoadTextureFromFile(pathToBackground.c_str(), &backgroundTexture, &backgroundImageWidth, &backgroundImageHeight);
+		IM_ASSERT(ret);
+	}
+	else
+	{
+		ret = LoadTextureFromFile("background.jpg", &backgroundTexture, &backgroundImageWidth, &backgroundImageHeight);
+		IM_ASSERT(ret);
+	}
+#endif
 
 	const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
 
