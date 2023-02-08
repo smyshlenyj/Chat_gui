@@ -499,7 +499,6 @@ int UI(int, char**)
 				{
 					Message reply = Message(user.getLogin(), selectedRecepient.getLogin(), message);
 					reply.sendMessage();
-					//user.setLogin(login);
 
 					// Clear the buffer
 					strncpy(message, "", 256);
