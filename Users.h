@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "User.h"
 
 struct Users   // read and store all user records
@@ -11,7 +12,6 @@ public:
 	Users();
 
 	bool uniqueLogin(std::string const&);
-	void printUsers(); // just prints all user names and logins
 	std::vector<User> listOfUsers();
 	bool loginAndPasswordMatch(User const&); // check is login matching the password
 	bool loginAndPasswordMatch(std::string const&, std::string const&); // check is login matching the password

@@ -498,7 +498,7 @@ int UI(int, char**)
 				if (strcmp(message, "") != 0)
 				{
 					Message reply = Message(user.getLogin(), selectedRecepient.getLogin(), message);
-					reply.sendMessage();
+					currentChat.sendMessage(reply);
 
 					// Clear the buffer
 					strncpy(message, "", 256);

@@ -1,5 +1,4 @@
 #include "stbi/stb_image.h"
-#include <iostream>
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)

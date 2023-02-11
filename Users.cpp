@@ -6,7 +6,6 @@
 
 Users::Users()
 {
-
 	std::ifstream readFromDB;
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -81,12 +80,6 @@ bool Users::uniqueLogin(std::string const& login) // check login for uniqueness
 	return true;
 }
 
-void Users::printUsers() // just prints all user names and logins
-{
-	for (auto i : users)
-		std::cout << "User: " << i.getLogin() << ",\t\t Name: " << i.getUserName() << '\n';
-}
-
 std::vector<User> Users::listOfUsers() // just prints all user names and logins
 {
 	return users;
@@ -121,6 +114,7 @@ std::string Users::findUserNameByLogin(std::string const& login)
 		if (i.getLogin() == login)
 			return i.getUserName();
 	}
+	return "";
 }
 
 void Users::addUser(User const& user)

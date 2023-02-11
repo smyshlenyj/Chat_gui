@@ -1,8 +1,8 @@
 #pragma once
-#include <iostream>
 #include <list>
 #include <fstream>
 #include <sstream>
+#include "Message.h"
 
 struct Chat
 {
@@ -12,6 +12,6 @@ private:
 public:
 	Chat(std::string const&, std::string const&); // universal chat constructor
 
-	void printChat(); // just prints all messages in Chat object
 	std::list<std::string> listOfMessages();
+	void sendMessage(const Message&);
 };
