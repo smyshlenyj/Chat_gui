@@ -22,7 +22,7 @@ Chat::Chat(std::string const& _sender, std::string const& _recipient) // univers
 		{
 			std::istringstream ss(msg);
 			std::string token;
-			int i = 0; // iterator for while
+			size_t i = 0; // iterator for while
 			std::string array[3];
 			while (std::getline(ss, token, '\t'))
 			{
@@ -55,7 +55,7 @@ Chat::Chat(std::string const& _sender, std::string const& _recipient) // univers
 			{
 				std::istringstream ss(msg);
 				std::string token;
-				int i = 0; // iterator for while
+				size_t i = 0; // iterator for while
 				std::string array[3];
 				while (std::getline(ss, token, '\t'))
 				{

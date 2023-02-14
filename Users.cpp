@@ -23,7 +23,7 @@ Users::Users()
 			{
 				std::istringstream ss(userRecord);
 				std::string token;
-				int i = 0; // iterator for while
+				size_t i = 0; // iterator for while
 				std::string array[3];
 				while (std::getline(ss, token, '\t'))
 				{
@@ -55,7 +55,7 @@ Users::Users()
 		{
 			std::istringstream ss(userRecord);
 			std::string token;
-			int i = 0; // iterator for while
+			size_t i = 0; // iterator for while
 			std::string array[3];
 			while (std::getline(ss, token, '\t'))
 			{
