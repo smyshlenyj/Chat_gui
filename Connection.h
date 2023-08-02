@@ -9,7 +9,7 @@
 #include <list>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#pragma comment(lib, "ws2_32.lib") // обеспечивает доступ к некоторым функциям
+#pragma comment(lib, "ws2_32.lib") //
 #include <winsock2.h>
 #else
 #include <sys/socket.h>
