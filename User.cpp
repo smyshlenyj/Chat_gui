@@ -7,23 +7,8 @@ User::User(std::string const& _login, std::string const& _password, std::string 
 	login(_login), password(_password), userName(_userName) {}
 User::User(std::string const& _login, std::string const& _password) :
 	login(_login), password(_password) {}
-User::User(std::string const& = "_all") :
+User::User(std::string const& login) :
 	login("_all"), password(""), userName("PUBLIC GROUP") {}
-
-bool User::loginValid()
-{
-	// '\t' is used as delimiter in DB, _all is used as public chat id
-	if (login.empty() || login == "_all" || login.find(' ') != std::string::npos || login.find('\t') != std::string::npos) return false;
-	return true;
-}
-
-bool User::passwordValid(std::string const& _password)
-{
-
-	if (_password.empty() || _password.find('\t') != std::string::npos) return false; // '\t' is used as delimiter in database
-
-	return true;
-}
 
 std::string hashPassword(const std::string& _password)
 {
