@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 
 struct User
 {
@@ -10,11 +9,8 @@ public:
 	// struct constructors for different purposes:
 	User(std::string const&, std::string const&, std::string const&);
 	User(std::string const&, std::string const&);
-	User(std::string const&);
-	User() = default;
-
-	bool loginValid();
-	bool passwordValid(std::string const&);
+	User(std::string const& = "_all");
+	//User() = default;
 
 	std::string getLogin()	  const noexcept;
 	std::string getPassword() const noexcept;

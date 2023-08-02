@@ -1,0 +1,104 @@
+[
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/main.cpp.o -c /home/jay/projects/chat_gui/main.cpp",
+  "file": "/home/jay/projects/chat_gui/main.cpp",
+  "output": "CMakeFiles/chat_gui.dir/main.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/Chat.cpp.o -c /home/jay/projects/chat_gui/Chat.cpp",
+  "file": "/home/jay/projects/chat_gui/Chat.cpp",
+  "output": "CMakeFiles/chat_gui.dir/Chat.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/LoadImage.cpp.o -c /home/jay/projects/chat_gui/LoadImage.cpp",
+  "file": "/home/jay/projects/chat_gui/LoadImage.cpp",
+  "output": "CMakeFiles/chat_gui.dir/LoadImage.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/Message.cpp.o -c /home/jay/projects/chat_gui/Message.cpp",
+  "file": "/home/jay/projects/chat_gui/Message.cpp",
+  "output": "CMakeFiles/chat_gui.dir/Message.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/SHA256.cpp.o -c /home/jay/projects/chat_gui/SHA256.cpp",
+  "file": "/home/jay/projects/chat_gui/SHA256.cpp",
+  "output": "CMakeFiles/chat_gui.dir/SHA256.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/UI.cpp.o -c /home/jay/projects/chat_gui/UI.cpp",
+  "file": "/home/jay/projects/chat_gui/UI.cpp",
+  "output": "CMakeFiles/chat_gui.dir/UI.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/User.cpp.o -c /home/jay/projects/chat_gui/User.cpp",
+  "file": "/home/jay/projects/chat_gui/User.cpp",
+  "output": "CMakeFiles/chat_gui.dir/User.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/Users.cpp.o -c /home/jay/projects/chat_gui/Users.cpp",
+  "file": "/home/jay/projects/chat_gui/Users.cpp",
+  "output": "CMakeFiles/chat_gui.dir/Users.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/Connection.cpp.o -c /home/jay/projects/chat_gui/Connection.cpp",
+  "file": "/home/jay/projects/chat_gui/Connection.cpp",
+  "output": "CMakeFiles/chat_gui.dir/Connection.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/Constants.cpp.o -c /home/jay/projects/chat_gui/Constants.cpp",
+  "file": "/home/jay/projects/chat_gui/Constants.cpp",
+  "output": "CMakeFiles/chat_gui.dir/Constants.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/imgui.cpp.o -c /home/jay/projects/chat_gui/imgui.cpp",
+  "file": "/home/jay/projects/chat_gui/imgui.cpp",
+  "output": "CMakeFiles/chat_gui.dir/imgui.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/imgui_demo.cpp.o -c /home/jay/projects/chat_gui/imgui_demo.cpp",
+  "file": "/home/jay/projects/chat_gui/imgui_demo.cpp",
+  "output": "CMakeFiles/chat_gui.dir/imgui_demo.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/imgui_draw.cpp.o -c /home/jay/projects/chat_gui/imgui_draw.cpp",
+  "file": "/home/jay/projects/chat_gui/imgui_draw.cpp",
+  "output": "CMakeFiles/chat_gui.dir/imgui_draw.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/imgui_tables.cpp.o -c /home/jay/projects/chat_gui/imgui_tables.cpp",
+  "file": "/home/jay/projects/chat_gui/imgui_tables.cpp",
+  "output": "CMakeFiles/chat_gui.dir/imgui_tables.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/imgui_widgets.cpp.o -c /home/jay/projects/chat_gui/imgui_widgets.cpp",
+  "file": "/home/jay/projects/chat_gui/imgui_widgets.cpp",
+  "output": "CMakeFiles/chat_gui.dir/imgui_widgets.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/imgui_impl_glfw.cpp.o -c /home/jay/projects/chat_gui/imgui_impl_glfw.cpp",
+  "file": "/home/jay/projects/chat_gui/imgui_impl_glfw.cpp",
+  "output": "CMakeFiles/chat_gui.dir/imgui_impl_glfw.cpp.o"
+},
+{
+  "directory": "/home/jay/projects/chat_gui/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/chat_gui.dir/imgui_impl_opengl3.cpp.o -c /home/jay/projects/chat_gui/imgui_impl_opengl3.cpp",
+  "file": "/home/jay/projects/chat_gui/imgui_impl_opengl3.cpp",
+  "output": "CMakeFiles/chat_gui.dir/imgui_impl_opengl3.cpp.o"
+}
+]

@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/chat_gui.dir/Chat.cpp.o"
+  "CMakeFiles/chat_gui.dir/Chat.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/Connection.cpp.o"
+  "CMakeFiles/chat_gui.dir/Connection.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/Constants.cpp.o"
+  "CMakeFiles/chat_gui.dir/Constants.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/LoadImage.cpp.o"
+  "CMakeFiles/chat_gui.dir/LoadImage.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/Message.cpp.o"
+  "CMakeFiles/chat_gui.dir/Message.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/SHA256.cpp.o"
+  "CMakeFiles/chat_gui.dir/SHA256.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/UI.cpp.o"
+  "CMakeFiles/chat_gui.dir/UI.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/User.cpp.o"
+  "CMakeFiles/chat_gui.dir/User.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/Users.cpp.o"
+  "CMakeFiles/chat_gui.dir/Users.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/imgui.cpp.o"
+  "CMakeFiles/chat_gui.dir/imgui.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/imgui_demo.cpp.o"
+  "CMakeFiles/chat_gui.dir/imgui_demo.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/imgui_draw.cpp.o"
+  "CMakeFiles/chat_gui.dir/imgui_draw.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/imgui_impl_glfw.cpp.o"
+  "CMakeFiles/chat_gui.dir/imgui_impl_glfw.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/imgui_impl_opengl3.cpp.o"
+  "CMakeFiles/chat_gui.dir/imgui_impl_opengl3.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/imgui_tables.cpp.o"
+  "CMakeFiles/chat_gui.dir/imgui_tables.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/imgui_widgets.cpp.o"
+  "CMakeFiles/chat_gui.dir/imgui_widgets.cpp.o.d"
+  "CMakeFiles/chat_gui.dir/main.cpp.o"
+  "CMakeFiles/chat_gui.dir/main.cpp.o.d"
+  "chat_gui"
+  "chat_gui.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/chat_gui.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

@@ -1,6 +1,7 @@
 #include <filesystem>
 #include "UI.h"
 #include "Users.h"
+#include "Chat.h"
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -26,15 +27,15 @@ int UI(int, char**)
 	const char* glsl_version = "#version 150";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		   // Required on Mac
 #else
 	// GL 3.0 + GLSL 130
 	const char* glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+	// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
 	// Create window with graphics context
@@ -47,13 +48,14 @@ int UI(int, char**)
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+	// io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	// io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsLight();
+	// ImGui::StyleColorsLight();
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -61,7 +63,7 @@ int UI(int, char**)
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	GLFWimage images[1];
-	images[0].pixels = stbi_load("ico.png", &images[0].width, &images[0].height, 0, 4); //rgba channels 
+	images[0].pixels = stbi_load("ico.png", &images[0].width, &images[0].height, 0, 4); // rgba channels
 	glfwSetWindowIcon(window, 1, images);
 	stbi_image_free(images[0].pixels);
 #endif
@@ -70,7 +72,7 @@ int UI(int, char**)
 	std::string home = getenv("HOME");
 	std::string path = home + "/.stackmessenger/ico.png";
 	GLFWimage images[1];
-	images[0].pixels = stbi_load(path.c_str(), &images[0].width, &images[0].height, 0, 4); //rgba channels 
+	images[0].pixels = stbi_load(path.c_str(), &images[0].width, &images[0].height, 0, 4); // rgba channels
 	glfwSetWindowIcon(window, 1, images);
 	stbi_image_free(images[0].pixels);
 #endif
@@ -86,6 +88,11 @@ int UI(int, char**)
 	bool signInModalWindow = false;
 
 	bool loggedIn = false;
+	bool errorSignIn = true;
+	bool loginIsAvailable = true;
+
+	int numberOfUsers;
+	int numberOfMessages;
 
 	static char login[64] = "";
 	static char password[64] = "";
@@ -98,7 +105,14 @@ int UI(int, char**)
 	ImVec2 messageWindowSize = ImVec2(500.0f, 720.0f);
 	User user;
 	User selectedRecepient;
-	Users usersDB = Users();
+
+	Users usersDB;
+	Chat currentChat;
+	Connection defaultConnection;
+	auto socketID = defaultConnection.connectClientOpen();
+	bool usersDbIsUpToDate = false;
+	bool currentChatIsUpToDate = false;
+
 	ImGuiWindowFlags windowFlags = 0;
 	windowFlags |= ImGuiWindowFlags_NoCollapse;
 	windowFlags |= ImGuiWindowFlags_NoResize;
@@ -120,7 +134,7 @@ int UI(int, char**)
 #endif
 
 #ifdef __linux__
-	std::filesystem::path stackPath{ home + "/.stackmessenger" };
+	std::filesystem::path stackPath{home + "/.stackmessenger"};
 	if (std::filesystem::exists(stackPath))
 	{
 		std::string pathToAvatar = home + "/.stackmessenger/avatar.jpg";
@@ -133,7 +147,6 @@ int UI(int, char**)
 		IM_ASSERT(ret);
 	}
 #endif
-
 
 	int backgroundImageWidth = 1280;
 	int backgroundImageHeight = 720;
@@ -194,7 +207,6 @@ int UI(int, char**)
 			ImGui::End();
 		}
 
-
 		if (showMainMenuWindow)
 		{
 			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
@@ -209,8 +221,7 @@ int UI(int, char**)
 				ImGui::SameLine();
 				ImGui::Text(user.getLogin().c_str());
 
-
-				if (ImGui::Button("Back to messages"))   // Buttons return true when clicked (most widgets return true when edited/activated)
+				if (ImGui::Button("Back to messages")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
 					showSignInWindow = false;
 					showMainMenuWindow = false;
@@ -218,7 +229,7 @@ int UI(int, char**)
 					showMessageWindow = true;
 				}
 
-				if (ImGui::Button("Sign out"))   // Buttons return true when clicked (most widgets return true when edited/activated)
+				if (ImGui::Button("Sign out")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
 					loggedIn = false;
 					showSignInWindow = false;
@@ -233,13 +244,13 @@ int UI(int, char**)
 				ImGui::Text("Please sign in or sign up:");
 				ImGui::Text("");
 
-				if (ImGui::Button("Sign in"))   // Buttons return true when clicked (most widgets return true when edited/activated)
+				if (ImGui::Button("Sign in")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
 					showSignInWindow = true;
 					showMainMenuWindow = false;
 				}
 
-				if (ImGui::Button("Sign up"))   // Buttons return true when clicked (most widgets return true when edited/activated)
+				if (ImGui::Button("Sign up")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
 					showSignUpWindow = true;
 					showMainMenuWindow = false;
@@ -247,9 +258,9 @@ int UI(int, char**)
 			}
 			ImGui::Text("");
 
-			if (ImGui::Button("Exit"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+			if (ImGui::Button("Exit")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				programAlive = false;
-			//	ImGui::Checkbox("Demo Window", &show_demo_window);      
+			//	ImGui::Checkbox("Demo Window", &show_demo_window);
 
 			ImGui::End();
 		}
@@ -272,7 +283,7 @@ int UI(int, char**)
 					ImGui::Text("Login cannot be empty!");
 				if (strcmp(userName, "") == 0)
 					ImGui::Text("User name cannot be empty!");
-				if (!usersDB.uniqueLogin(std::string(login)))
+				if (loginIsAvailable == false)
 					ImGui::Text("User %s already exists!", login);
 
 				ImGui::Separator();
@@ -290,7 +301,7 @@ int UI(int, char**)
 			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::SetNextWindowSize(windowSize, ImGuiCond_None);
 
-			ImGui::Begin("Sign up", NULL, windowFlags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Begin("Sign up", NULL, windowFlags); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 
 			ImGui::Text("Login:    ");
 			ImGui::SameLine();
@@ -312,8 +323,11 @@ int UI(int, char**)
 					strcmp(login, "") == 0 ||
 					strcmp(password, "") == 0 ||
 					strcmp(userName, "") == 0 ||
-					!usersDB.uniqueLogin(std::string(login)))
+					!usersDB.uniqueLogin(socketID, std::string(login)))
+				{
 					signUpModalWindow = true;
+					loginIsAvailable = false;
+				}
 				else
 				{
 					user.setLogin(login);
@@ -321,8 +335,8 @@ int UI(int, char**)
 					user.setUserName(userName);
 					loggedIn = true;
 
-					usersDB.addUser(user);
-
+					usersDB.addUser(socketID, user);
+					usersDB.refresh(socketID);
 					showUsersWindow = true;
 					showSignUpWindow = false;
 
@@ -355,13 +369,15 @@ int UI(int, char**)
 					ImGui::Text("Password cannot be empty!");
 				if (strcmp(login, "") == 0)
 					ImGui::Text("Login cannot be empty!");
-				if (!usersDB.loginAndPasswordMatch(login, password))
+				if (errorSignIn)
 					ImGui::Text("Error. No such login + password combination!");
 
 				ImGui::Separator();
 
 				if (ImGui::Button("I understand", ImVec2(120, 0)))
 				{
+					// strncpy(login, "", 64);
+					// strncpy(password, "", 64);
 					signInModalWindow = false;
 					ImGui::CloseCurrentPopup();
 				}
@@ -373,7 +389,7 @@ int UI(int, char**)
 			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::SetNextWindowSize(windowSize, ImGuiCond_None);
 
-			ImGui::Begin("Sign in", NULL, windowFlags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Begin("Sign in", NULL, windowFlags); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 
 			ImGui::Text("Login:    ");
 			ImGui::SameLine();
@@ -390,13 +406,17 @@ int UI(int, char**)
 				if (strcmp(login, "_all") == 0 ||
 					strcmp(login, "") == 0 ||
 					strcmp(password, "") == 0 ||
-					!usersDB.loginAndPasswordMatch(login, password))
+					!usersDB.loginAndPasswordMatch(socketID, login, password))
+				{
+					errorSignIn = true;
 					signInModalWindow = true;
+				}
+
 				else
 				{
 					user.setLogin(login);
 					user.setPassword(password);
-					user.setUserName(usersDB.findUserNameByLogin(login));
+					user.setUserName(usersDB.findUserNameByLogin(socketID, login));
 					loggedIn = true;
 					showSignInWindow = false;
 					showUsersWindow = true;
@@ -405,12 +425,12 @@ int UI(int, char**)
 					strncpy(login, "", 64);
 					strncpy(password, "", 64);
 				}
-			}
 
-			if (ImGui::Button("Exit to main menu"))
-			{
-				showSignInWindow = false;
-				showMainMenuWindow = true;
+				if (ImGui::Button("Exit to main menu"))
+				{
+					showSignInWindow = false;
+					showMainMenuWindow = true;
+				}
 			}
 			ImGui::End();
 		}
@@ -419,11 +439,15 @@ int UI(int, char**)
 		{
 			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
 			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
-			ImGui::Begin("Users", NULL, windowFlags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Begin("Users", NULL, windowFlags); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 			ImGui::Text("Registered users:");
 			ImGui::Text("");
 
-			Users usersDB = Users();
+			if (!usersDbIsUpToDate)
+			{
+				usersDB.refresh(socketID);
+				usersDbIsUpToDate = true;
+			}
 
 			ImGui::PushID(0);
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(22, 21, 23));
@@ -434,6 +458,7 @@ int UI(int, char**)
 				User groupUser("_all");
 				selectedRecepient = groupUser;
 				showMessageWindow = true;
+				currentChatIsUpToDate = false;
 			}
 			ImGui::PopStyleColor(3);
 			ImGui::PopID();
@@ -451,6 +476,7 @@ int UI(int, char**)
 					{
 						selectedRecepient = element;
 						showMessageWindow = true;
+						currentChatIsUpToDate = false;
 					}
 					ImGui::PopStyleColor(3);
 					ImGui::PopID();
@@ -461,19 +487,26 @@ int UI(int, char**)
 			ImGui::Text("");
 			if (ImGui::Button("Exit to main menu"))
 			{
-				//selectedRecepient = User();
 				showUsersWindow = false;
 				showMessageWindow = false;
 				showMainMenuWindow = true;
+				usersDbIsUpToDate = false;
+				currentChatIsUpToDate = false;
 			}
 			ImGui::End();
 		}
 
 		if (showMessageWindow)
 		{
+			if (!currentChatIsUpToDate)
+			{
+				currentChat = Chat(socketID, user.getLogin(), selectedRecepient.getLogin());
+				currentChatIsUpToDate = true;
+			}
+
 			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
 			ImGui::SetNextWindowPos(ImVec2(500.0f, 0.0f), ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
-			ImGui::Begin("Messages", NULL, windowFlags);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Begin("Messages", NULL, windowFlags); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 
 			ImGui::Image((void*)(intptr_t)avatarImageTexture, ImVec2(avatarImageWidth, avatarImageHeight));
 			ImGui::SameLine();
@@ -482,7 +515,6 @@ int UI(int, char**)
 			ImGui::Separator();
 			ImGui::BeginChild("ChildL", ImVec2(ImGui::GetContentRegionAvail().x * 1.0f, 500), false, windowFlags);
 
-			Chat currentChat = Chat(user.getLogin(), selectedRecepient.getLogin());
 			for (auto const& i : currentChat.listOfMessages())
 				ImGui::TextWrapped(i.c_str());
 
@@ -498,9 +530,8 @@ int UI(int, char**)
 				if (strcmp(message, "") != 0)
 				{
 					Message reply = Message(user.getLogin(), selectedRecepient.getLogin(), message);
-					reply.sendMessage();
-					//user.setLogin(login);
-
+					reply.sendMessage(socketID);
+					currentChatIsUpToDate = false;
 					// Clear the buffer
 					strncpy(message, "", 256);
 				}

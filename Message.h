@@ -1,6 +1,6 @@
 #pragma once
-#include <iostream>
 #include <fstream>
+#include "Connection.h"
 
 struct Message
 {
@@ -9,6 +9,9 @@ private:
 
 public:
 	Message(std::string const&, std::string const&, std::string const&);
+	void sendMessage(int);
 
-	void sendMessage();
+	//	std::string getSender()    const noexcept;
+	//	std::string getRecipient() const noexcept;
+	//	std::string getMessage()   const noexcept;
 };
