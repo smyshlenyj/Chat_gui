@@ -3,6 +3,8 @@
 Connection::Connection() = default;
 Connection::~Connection() = default;
 
+std::string serverAddress = "192.168.186.128";
+
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 SOCKET Connection::connectClientOpen()
 {
@@ -26,7 +28,7 @@ SOCKET Connection::connectClientOpen()
 	}
 
 	clientService.sin_family = AF_INET;
-	clientService.sin_addr.s_addr = inet_addr("192.168.186.128");
+	clientService.sin_addr.s_addr = inet_addr(serverAddress.c_str());
 	clientService.sin_port = htons(PORT);
 
 	iResult = connect(ConnectSocket, (SOCKADDR*)&clientService, sizeof(clientService));
@@ -52,7 +54,7 @@ int Connection::connectClientOpen()
 
 	serveraddress.sin_family = AF_INET;
 	serveraddress.sin_port = htons(PORT);
-	serveraddress.sin_addr.s_addr = inet_addr("127.0.0.1");
+	serveraddress.sin_addr.s_addr = inet_addr(serverAddress.c_str());
 
 	int defaultConnection = connect(socket_discriptor, (struct sockaddr*)&serveraddress, sizeof(serveraddress));
 	if (defaultConnection == -1)
