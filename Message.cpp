@@ -1,5 +1,6 @@
 #include <filesystem>
 #include "Message.h"
+#include "Constants.h"
 
 Message::Message(std::string const& _sender, std::string const& _recipient, std::string const& _message) : sender(_sender), recipient(_recipient), message(_message) {}
 

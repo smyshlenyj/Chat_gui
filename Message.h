@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include "Connection.h"
 
 struct Message
 {
@@ -11,4 +12,7 @@ public:
 	std::string getSender()		const noexcept;
 	std::string getRecipient()	 const noexcept;
 	std::string getMessage()	const noexcept;
+
+
+	void sendMessage(int); // push message to data base
 };

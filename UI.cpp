@@ -87,11 +87,8 @@ int UI(int, char**)
 	bool signInModalWindow = false;
 
 	bool loggedIn = false;
-	bool errorSignIn = true;
+	//	bool errorSignIn = true;
 	bool loginIsAvailable = true;
-
-	int numberOfUsers;
-	int numberOfMessages;
 
 	static char login[64] = "";
 	static char password[64] = "";
@@ -245,6 +242,7 @@ int UI(int, char**)
 
 				if (ImGui::Button("Sign in")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					usersDB.refresh(socketID);
 					showSignInWindow = true;
 					showMainMenuWindow = false;
 				}
@@ -329,11 +327,13 @@ int UI(int, char**)
 				}
 				else
 				{
+					loginIsAvailable = true;
 					user.setLogin(login);
 					user.setPassword(password);
 					user.setUserName(userName);
 					loggedIn = true;
 
+					loginIsAvailable = true;
 					usersDB.addUser(socketID, user);
 					usersDB.refresh(socketID);
 					showUsersWindow = true;
@@ -368,8 +368,8 @@ int UI(int, char**)
 					ImGui::Text("Password cannot be empty!");
 				if (strcmp(login, "") == 0)
 					ImGui::Text("Login cannot be empty!");
-				if (errorSignIn)
-					ImGui::Text("Error. No such login + password combination!");
+				//if (errorSignIn)
+				//	ImGui::Text("Error. No such login + password combination!");
 
 				ImGui::Separator();
 
@@ -407,7 +407,7 @@ int UI(int, char**)
 					strcmp(password, "") == 0 ||
 					!usersDB.loginAndPasswordMatch(socketID, login, password))
 				{
-					errorSignIn = true;
+					//errorSignIn = true;
 					signInModalWindow = true;
 				}
 
@@ -558,4 +558,4 @@ int UI(int, char**)
 	glfwTerminate();
 
 	return 0;
-}
+	}

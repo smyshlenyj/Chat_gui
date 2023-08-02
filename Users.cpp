@@ -5,7 +5,7 @@
 #include <string.h>
 #include <sstream>
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#pragma comment(lib, "ws2_32.lib") // обеспечивает доступ к некоторым функциям
+#pragma comment(lib, "ws2_32.lib") 
 #include <winsock2.h>
 #else
 #include <sys/socket.h>
@@ -89,7 +89,7 @@ bool Users::loginAndPasswordMatch(int socketID, const std::string& login, const 
 	if (bytesSent == -1)
 	{
 		std::cout << "Error sending query!" << std::endl;
-}
+	}
 	char reply[MESSAGE_LENGTH];
 	memset(reply, 0, MESSAGE_LENGTH);
 
@@ -159,7 +159,6 @@ void Users::addUser(int socketID, User const& user)
 void Users::refresh(int socketID)
 {
 	std::string message = "getUsers\t";
-	size_t messageSize = message.size() + 1;
 	char msg[MESSAGE_LENGTH];
 	memset(msg, 0, MESSAGE_LENGTH);
 	strcpy(msg, message.c_str());
