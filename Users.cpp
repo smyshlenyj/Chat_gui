@@ -33,7 +33,7 @@ bool Users::uniqueLogin(int socketID, std::string const& login) // check login f
 #endif
 
 #ifdef __linux__
-	bytesSent = write(socketID, msg, messageSize);
+	bytesSent = write(socketID, msg, MESSAGE_LENGTH);
 #endif
 
 	if (bytesSent == -1)
@@ -82,7 +82,7 @@ bool Users::loginAndPasswordMatch(int socketID, const std::string& login, const 
 #endif
 
 #ifdef __linux__
-	bytesSent = write(socketID, buffer, messageSize);
+	bytesSent = write(socketID, msg, MESSAGE_LENGTH);
 #endif
 
 	if (bytesSent == -1)
@@ -97,7 +97,7 @@ bool Users::loginAndPasswordMatch(int socketID, const std::string& login, const 
 #endif
 
 #ifdef __linux__
-	read(socketID, reply, sizeof(reply));
+	read(socketID, reply, MESSAGE_LENGTH);
 #endif
 
 	std::cout << "Reply from server: " << reply << std::endl;
