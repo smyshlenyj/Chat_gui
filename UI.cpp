@@ -87,7 +87,7 @@ int UI(int, char**)
 	bool signInModalWindow = false;
 
 	bool loggedIn = false;
-	//	bool errorSignIn = true;
+	bool errorSignIn = true;
 	bool loginIsAvailable = true;
 
 	static char login[64] = "";
@@ -368,8 +368,8 @@ int UI(int, char**)
 					ImGui::Text("Password cannot be empty!");
 				if (strcmp(login, "") == 0)
 					ImGui::Text("Login cannot be empty!");
-				//if (errorSignIn)
-				//	ImGui::Text("Error. No such login + password combination!");
+				if (errorSignIn)
+					ImGui::Text("Error. No such login + password combination!");
 
 				ImGui::Separator();
 
@@ -407,7 +407,7 @@ int UI(int, char**)
 					strcmp(password, "") == 0 ||
 					!usersDB.loginAndPasswordMatch(socketID, login, password))
 				{
-					//errorSignIn = true;
+					errorSignIn = true;
 					signInModalWindow = true;
 				}
 
@@ -436,6 +436,7 @@ int UI(int, char**)
 
 		if (showUsersWindow)
 		{
+			//	std::cout << "436" << std::endl;
 			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
 			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::Begin("Users", NULL, windowFlags); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
@@ -444,8 +445,10 @@ int UI(int, char**)
 
 			if (!usersDbIsUpToDate)
 			{
+				std::cout << "448" << std::endl;
 				usersDB.refresh(socketID);
 				usersDbIsUpToDate = true;
+				std::cout << "451" << std::endl;
 			}
 
 			ImGui::PushID(0);
@@ -458,12 +461,13 @@ int UI(int, char**)
 				selectedRecepient = groupUser;
 				showMessageWindow = true;
 				currentChatIsUpToDate = false;
+				usersDbIsUpToDate = false;
 			}
 			ImGui::PopStyleColor(3);
 			ImGui::PopID();
 
 			int i = 0;
-			for (auto element : usersDB.listOfUsers(socketID, user.getLogin()))
+			for (User element : usersDB.listOfUsers(socketID, user.getLogin()))
 			{
 				if (user.getLogin() != element.getLogin())
 				{
@@ -476,6 +480,7 @@ int UI(int, char**)
 						selectedRecepient = element;
 						showMessageWindow = true;
 						currentChatIsUpToDate = false;
+						usersDbIsUpToDate = false;
 					}
 					ImGui::PopStyleColor(3);
 					ImGui::PopID();
@@ -558,4 +563,4 @@ int UI(int, char**)
 	glfwTerminate();
 
 	return 0;
-	}
+}
