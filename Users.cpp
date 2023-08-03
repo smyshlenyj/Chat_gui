@@ -37,7 +37,7 @@ bool Users::uniqueLogin(int socketID, std::string const& login) // check login f
 #endif
 
 	if (bytesSent == -1)
-		std::cout << "Error sending query!" << std::endl;
+		std::cout << "Query error!" << std::endl;
 
 	char reply[MESSAGE_LENGTH];
 	memset(reply, 0, MESSAGE_LENGTH);
@@ -55,11 +55,11 @@ bool Users::uniqueLogin(int socketID, std::string const& login) // check login f
 	return result;
 }
 
-void Users::printUsers() // just prints all user names and logins
-{
-	for (auto i : users)
-		std::cout << "User: " << i.getLogin() << ",\t\t Name: " << i.getUserName() << '\n';
-}
+//void Users::printUsers() // just prints all user names and logins
+//{
+//	for (auto i : users)
+//		std::cout << "User: " << i.getLogin() << ",\t\t Name: " << i.getUserName() << '\n';
+//}
 
 std::vector<User> Users::listOfUsers(int socketID, const std::string& login) // just prints all user names and logins
 {
@@ -87,7 +87,7 @@ bool Users::loginAndPasswordMatch(int socketID, const std::string& login, const 
 
 	if (bytesSent == -1)
 	{
-		std::cout << "Error sending query!" << std::endl;
+		std::cout << "Query error!" << std::endl;
 	}
 	char reply[MESSAGE_LENGTH];
 	memset(reply, 0, MESSAGE_LENGTH);
@@ -122,7 +122,7 @@ std::string Users::findUserNameByLogin(int socketID, const std::string& login)
 #endif
 
 	if (bytesSent == -1)
-		std::cout << "Error sending query!" << std::endl;
+		std::cout << "Query error!" << std::endl;
 
 	char userName[MESSAGE_LENGTH];
 	memset(userName, 0, MESSAGE_LENGTH);
@@ -163,7 +163,6 @@ void Users::refresh(int socketID)
 	memset(msg, 0, MESSAGE_LENGTH);
 	strcpy(msg, message.c_str());
 	size_t bytes = -1;
-	std::cout << "refresh166" << std::endl;
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	bytes = send(socketID, msg, MESSAGE_LENGTH, NULL);
 #endif
@@ -173,11 +172,10 @@ void Users::refresh(int socketID)
 #endif
 
 	if (bytes == -1)
-		std::cout << "Error sending a query!" << std::endl;
+		std::cout << "Query error!" << std::endl;
 
 	char reply[MESSAGE_LENGTH];
 	memset(reply, 0, MESSAGE_LENGTH);
-	std::cout << "refresh180" << std::endl;
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	recv(socketID, reply, MESSAGE_LENGTH, NULL);
 #endif
@@ -196,7 +194,7 @@ void Users::refresh(int socketID)
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 		recv(socketID, user, MESSAGE_LENGTH, NULL);
-		std::cout << "getUsers:user:" << user << std::endl;
+		std::cout << "getUsers:user: " << user << std::endl;
 #endif
 
 #ifdef __linux__

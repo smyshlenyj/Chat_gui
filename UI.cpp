@@ -445,10 +445,8 @@ int UI(int, char**)
 
 			if (!usersDbIsUpToDate)
 			{
-				std::cout << "448" << std::endl;
 				usersDB.refresh(socketID);
 				usersDbIsUpToDate = true;
-				std::cout << "451" << std::endl;
 			}
 
 			ImGui::PushID(0);

@@ -12,7 +12,7 @@ public:
 	Users();
 
 	bool uniqueLogin(int, std::string const&);
-	void printUsers(); // just prints all user names and logins
+	//void printUsers(); // just prints all user names and logins
 	std::vector<User> listOfUsers(int, const std::string&);
 	//bool loginAndPasswordMatch(User const&); // check is login matching the password
 	bool loginAndPasswordMatch(int, const std::string&, const std::string&); // check is login matching the password
