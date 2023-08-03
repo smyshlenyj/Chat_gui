@@ -78,7 +78,7 @@ void Connection::connectClose(int socket_discriptor)
 	send(socket_discriptor, msg, MESSAGE_LENGTH, NULL);
 	closesocket(socket_discriptor);
 #endif
-
+	std::cout << "TerminateSession sent to server " << std::endl;
 #ifdef __linux__
 	write(socket_discriptor, msg, MESSAGE_LENGTH);
 	close(socket_discriptor);
