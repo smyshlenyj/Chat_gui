@@ -19,5 +19,4 @@ public:
 	std::list<std::string> getChat(int, std::string const&, std::string const&);
 	void printChat(); // just prints all messages in Chat object
 	std::list<std::string> listOfMessages();
-	//void sendMessage(int, const Message&);
 };

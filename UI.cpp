@@ -256,7 +256,10 @@ int UI(int, char**)
 			ImGui::Text("");
 
 			if (ImGui::Button("Exit")) // Buttons return true when clicked (most widgets return true when edited/activated)
+			{
 				programAlive = false;
+				defaultConnection.connectClose(socketID);
+			}
 			//	ImGui::Checkbox("Demo Window", &show_demo_window);
 
 			ImGui::End();

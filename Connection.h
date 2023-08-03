@@ -31,10 +31,4 @@ public:
 
 	void connectClose(int socket_discriptor);
 
-	// std::string reseiveMessage(int connection);
-	// void sendMessage(int connection, std::string &str);
-	bool loginAndPasswordMatch(int, const std::string&, const std::string&);
-	std::string findUserNameByLogin(int, const std::string&);
-	std::vector<User> getUsers(int, const std::string&);
-	std::list<std::string> getChat(int, const std::string&, const std::string&);
 };
