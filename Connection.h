@@ -9,7 +9,7 @@
 #include <list>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#pragma comment(lib, "ws2_32.lib") // обеспечивает доступ к некоторым функциям
+#pragma comment(lib, "ws2_32.lib") //
 #include <winsock2.h>
 #else
 #include <sys/socket.h>
@@ -31,10 +31,4 @@ public:
 
 	void connectClose(int socket_discriptor);
 
-	// std::string reseiveMessage(int connection);
-	// void sendMessage(int connection, std::string &str);
-	bool loginAndPasswordMatch(int, const std::string&, const std::string&);
-	std::string findUserNameByLogin(int, const std::string&);
-	std::vector<User> getUsers(int, const std::string&);
-	std::list<std::string> getChat(int, const std::string&, const std::string&);
 };

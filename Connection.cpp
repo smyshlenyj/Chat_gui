@@ -69,9 +69,18 @@ int Connection::connectClientOpen()
 
 void Connection::connectClose(int socket_discriptor)
 {
+	std::string usr = "TerminateSession";
+	char msg[MESSAGE_LENGTH];
+	memset(msg, 0, MESSAGE_LENGTH);
+	strcpy(msg, usr.c_str());
+
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	send(socket_discriptor, msg, MESSAGE_LENGTH, NULL);
 	closesocket(socket_discriptor);
-#else
+#endif
+std::cout << "TerminateSession sent to server " << std::endl;
+#ifdef __linux__
+	write(socket_discriptor, msg, MESSAGE_LENGTH);
 	close(socket_discriptor);
 #endif
 }

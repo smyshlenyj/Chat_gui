@@ -9,9 +9,6 @@ private:
 
 public:
 	Message(std::string const&, std::string const&, std::string const&);
-	void sendMessage(int);
 
-	//	std::string getSender()    const noexcept;
-	//	std::string getRecipient() const noexcept;
-	//	std::string getMessage()   const noexcept;
+	void sendMessage(int); // push message to data base
 };

@@ -4,9 +4,8 @@
 #include <iostream>
 #include <string.h>
 #include <sstream>
-#include "Constants.h"
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#pragma comment(lib, "ws2_32.lib") // обеспечивает доступ к некоторым функциям
+#pragma comment(lib, "ws2_32.lib") 
 #include <winsock2.h>
 #else
 #include <sys/socket.h>
@@ -14,18 +13,17 @@
 #include <unistd.h>
 #endif
 
-Users::Users(int socketID, std::string const &login)
+Users::Users(int socketID, std::string const& login)
 {
 	refresh(socketID);
 }
 
 Users::Users() {}
 
-bool Users::uniqueLogin(int socketID, std::string const &login) // check login for uniqueness
+bool Users::uniqueLogin(int socketID, std::string const& login) // check login for uniqueness
 {
 	std::string message = "uniqueLogin\t" + login;
 	char msg[MESSAGE_LENGTH];
-	memset(msg, 0, MESSAGE_LENGTH);
 	strcpy(msg, message.c_str());
 
 	size_t bytesSent = -1;
@@ -39,7 +37,7 @@ bool Users::uniqueLogin(int socketID, std::string const &login) // check login f
 #endif
 
 	if (bytesSent == -1)
-		std::cout << "Error sending query!" << std::endl;
+		std::cout << "Query error!" << std::endl;
 
 	char reply[MESSAGE_LENGTH];
 	memset(reply, 0, MESSAGE_LENGTH);
@@ -49,7 +47,7 @@ bool Users::uniqueLogin(int socketID, std::string const &login) // check login f
 #endif
 
 #ifdef __linux__
-	read(socketID, reply, MESSAGE_LENGTH);
+	read(socketID, reply, sizeof(reply));
 #endif
 
 	std::cout << "Reply from server: " << reply << std::endl;
@@ -57,18 +55,18 @@ bool Users::uniqueLogin(int socketID, std::string const &login) // check login f
 	return result;
 }
 
-void Users::printUsers() // just prints all user names and logins
-{
-	for (auto i : users)
-		std::cout << "User: " << i.getLogin() << ",\t\t Name: " << i.getUserName() << '\n';
-}
+//void Users::printUsers() // just prints all user names and logins
+//{
+//	for (auto i : users)
+//		std::cout << "User: " << i.getLogin() << ",\t\t Name: " << i.getUserName() << '\n';
+//}
 
-std::vector<User> Users::listOfUsers()
+std::vector<User> Users::listOfUsers(int socketID, const std::string& login) // just prints all user names and logins
 {
 	return users;
 }
 
-bool Users::loginAndPasswordMatch(int socketID, const std::string &login, const std::string &password)
+bool Users::loginAndPasswordMatch(int socketID, const std::string& login, const std::string& password)
 {
 	std::string hashedPassword = hashPassword(password);
 	std::string message = std::string("signIn") + '\t' + login + '\t' + hashedPassword + '\0';
@@ -89,7 +87,7 @@ bool Users::loginAndPasswordMatch(int socketID, const std::string &login, const 
 
 	if (bytesSent == -1)
 	{
-		std::cout << "Error sending query!" << std::endl;
+		std::cout << "Query error!" << std::endl;
 	}
 	char reply[MESSAGE_LENGTH];
 	memset(reply, 0, MESSAGE_LENGTH);
@@ -107,7 +105,7 @@ bool Users::loginAndPasswordMatch(int socketID, const std::string &login, const 
 	return result;
 }
 
-std::string Users::findUserNameByLogin(int socketID, const std::string &login)
+std::string Users::findUserNameByLogin(int socketID, const std::string& login)
 {
 	std::string message = "getUserName\t" + login;
 	size_t messageSize = message.size() + 1;
@@ -124,7 +122,7 @@ std::string Users::findUserNameByLogin(int socketID, const std::string &login)
 #endif
 
 	if (bytesSent == -1)
-		std::cout << "Error sending query!" << std::endl;
+		std::cout << "Query error!" << std::endl;
 
 	char userName[MESSAGE_LENGTH];
 	memset(userName, 0, MESSAGE_LENGTH);
@@ -141,7 +139,7 @@ std::string Users::findUserNameByLogin(int socketID, const std::string &login)
 	return userName;
 }
 
-void Users::addUser(int socketID, User const &user)
+void Users::addUser(int socketID, User const& user)
 {
 	std::string usr = "addUser\t" + user.getLogin() + "\t" + user.getPassword() + "\t" + user.getUserName();
 	char msg[MESSAGE_LENGTH];
@@ -159,12 +157,12 @@ void Users::addUser(int socketID, User const &user)
 
 void Users::refresh(int socketID)
 {
-	std::string message = "getUsers\t";
+
+	std::string message = "getUsers";
 	char msg[MESSAGE_LENGTH];
 	memset(msg, 0, MESSAGE_LENGTH);
 	strcpy(msg, message.c_str());
 	size_t bytes = -1;
-
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	bytes = send(socketID, msg, MESSAGE_LENGTH, NULL);
 #endif
@@ -174,11 +172,10 @@ void Users::refresh(int socketID)
 #endif
 
 	if (bytes == -1)
-		std::cout << "Error sending a query!" << std::endl;
+		std::cout << "Query error!" << std::endl;
 
 	char reply[MESSAGE_LENGTH];
 	memset(reply, 0, MESSAGE_LENGTH);
-
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	recv(socketID, reply, MESSAGE_LENGTH, NULL);
 #endif
@@ -190,13 +187,14 @@ void Users::refresh(int socketID)
 	int usersQuantity = std::atoi(reply);
 	std::cout << "Reply from server getUsers: " << usersQuantity << std::endl;
 	std::vector<User> listOfUsers;
-	for (int i = 0; i < usersQuantity; ++i)
+	for (size_t i = 0; i < usersQuantity; ++i)
 	{
 		char user[MESSAGE_LENGTH];
 		memset(user, 0, MESSAGE_LENGTH);
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 		recv(socketID, user, MESSAGE_LENGTH, NULL);
+		std::cout << "getUsers:user: " << user << std::endl;
 #endif
 
 #ifdef __linux__

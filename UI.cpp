@@ -1,7 +1,6 @@
 #include <filesystem>
 #include "UI.h"
 #include "Users.h"
-#include "Chat.h"
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -90,9 +89,6 @@ int UI(int, char**)
 	bool loggedIn = false;
 	bool errorSignIn = true;
 	bool loginIsAvailable = true;
-
-	int numberOfUsers;
-	int numberOfMessages;
 
 	static char login[64] = "";
 	static char password[64] = "";
@@ -246,6 +242,7 @@ int UI(int, char**)
 
 				if (ImGui::Button("Sign in")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					usersDB.refresh(socketID);
 					showSignInWindow = true;
 					showMainMenuWindow = false;
 				}
@@ -259,7 +256,10 @@ int UI(int, char**)
 			ImGui::Text("");
 
 			if (ImGui::Button("Exit")) // Buttons return true when clicked (most widgets return true when edited/activated)
+			{
 				programAlive = false;
+				defaultConnection.connectClose(socketID);
+			}
 			//	ImGui::Checkbox("Demo Window", &show_demo_window);
 
 			ImGui::End();
@@ -330,11 +330,13 @@ int UI(int, char**)
 				}
 				else
 				{
+					loginIsAvailable = true;
 					user.setLogin(login);
 					user.setPassword(password);
 					user.setUserName(userName);
 					loggedIn = true;
 
+					loginIsAvailable = true;
 					usersDB.addUser(socketID, user);
 					usersDB.refresh(socketID);
 					showUsersWindow = true;
@@ -437,6 +439,7 @@ int UI(int, char**)
 
 		if (showUsersWindow)
 		{
+			//	std::cout << "436" << std::endl;
 			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
 			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::Begin("Users", NULL, windowFlags); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
@@ -459,12 +462,13 @@ int UI(int, char**)
 				selectedRecepient = groupUser;
 				showMessageWindow = true;
 				currentChatIsUpToDate = false;
+				usersDbIsUpToDate = false;
 			}
 			ImGui::PopStyleColor(3);
 			ImGui::PopID();
 
 			int i = 0;
-			for (auto element : usersDB.listOfUsers())
+			for (User element : usersDB.listOfUsers(socketID, user.getLogin()))
 			{
 				if (user.getLogin() != element.getLogin())
 				{
@@ -477,6 +481,7 @@ int UI(int, char**)
 						selectedRecepient = element;
 						showMessageWindow = true;
 						currentChatIsUpToDate = false;
+						usersDbIsUpToDate = false;
 					}
 					ImGui::PopStyleColor(3);
 					ImGui::PopID();

@@ -1,6 +1,6 @@
 CMakeFiles/chat_gui.dir/Chat.cpp.o: /home/jay/projects/chat_gui/Chat.cpp \
  /usr/include/stdc-predef.h /home/jay/projects/chat_gui/Chat.h \
- /usr/include/c++/13.1.1/list \
+ /usr/include/c++/13.1.1/iostream \
  /usr/include/c++/13.1.1/bits/requires_hosted.h \
  /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/os_defines.h \
@@ -10,59 +10,26 @@ CMakeFiles/chat_gui.dir/Chat.cpp.o: /home/jay/projects/chat_gui/Chat.cpp \
  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
  /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/cpu_defines.h \
  /usr/include/c++/13.1.1/pstl/pstl_config.h \
- /usr/include/c++/13.1.1/bits/stl_algobase.h \
- /usr/include/c++/13.1.1/bits/functexcept.h \
- /usr/include/c++/13.1.1/bits/exception_defines.h \
- /usr/include/c++/13.1.1/bits/cpp_type_traits.h \
- /usr/include/c++/13.1.1/ext/type_traits.h \
- /usr/include/c++/13.1.1/ext/numeric_traits.h \
- /usr/include/c++/13.1.1/bits/stl_pair.h \
- /usr/include/c++/13.1.1/type_traits /usr/include/c++/13.1.1/bits/move.h \
- /usr/include/c++/13.1.1/bits/utility.h \
- /usr/include/c++/13.1.1/bits/stl_iterator_base_types.h \
- /usr/include/c++/13.1.1/bits/stl_iterator_base_funcs.h \
- /usr/include/c++/13.1.1/bits/concept_check.h \
- /usr/include/c++/13.1.1/debug/assertions.h \
- /usr/include/c++/13.1.1/bits/stl_iterator.h \
- /usr/include/c++/13.1.1/bits/ptr_traits.h \
- /usr/include/c++/13.1.1/debug/debug.h \
- /usr/include/c++/13.1.1/bits/predefined_ops.h \
- /usr/include/c++/13.1.1/bit /usr/include/c++/13.1.1/bits/allocator.h \
- /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/c++allocator.h \
- /usr/include/c++/13.1.1/bits/new_allocator.h /usr/include/c++/13.1.1/new \
- /usr/include/c++/13.1.1/bits/exception.h \
+ /usr/include/c++/13.1.1/ostream /usr/include/c++/13.1.1/ios \
+ /usr/include/c++/13.1.1/iosfwd /usr/include/c++/13.1.1/bits/stringfwd.h \
  /usr/include/c++/13.1.1/bits/memoryfwd.h \
- /usr/include/c++/13.1.1/bits/range_access.h \
- /usr/include/c++/13.1.1/initializer_list \
- /usr/include/c++/13.1.1/bits/stl_list.h \
- /usr/include/c++/13.1.1/ext/alloc_traits.h \
- /usr/include/c++/13.1.1/bits/alloc_traits.h \
- /usr/include/c++/13.1.1/bits/stl_construct.h \
- /usr/include/c++/13.1.1/bits/allocated_ptr.h \
- /usr/include/c++/13.1.1/ext/aligned_buffer.h \
- /usr/include/c++/13.1.1/bits/list.tcc \
- /usr/include/c++/13.1.1/bits/memory_resource.h \
- /usr/include/c++/13.1.1/cstddef \
- /usr/lib/gcc/x86_64-pc-linux-gnu/13.1.1/include/stddef.h \
- /usr/include/c++/13.1.1/bits/uses_allocator.h \
- /usr/include/c++/13.1.1/bits/uses_allocator_args.h \
- /usr/include/c++/13.1.1/tuple /usr/include/c++/13.1.1/bits/invoke.h \
- /usr/include/c++/13.1.1/fstream /usr/include/c++/13.1.1/istream \
- /usr/include/c++/13.1.1/ios /usr/include/c++/13.1.1/iosfwd \
- /usr/include/c++/13.1.1/bits/stringfwd.h \
  /usr/include/c++/13.1.1/bits/postypes.h /usr/include/c++/13.1.1/cwchar \
  /usr/include/wchar.h /usr/include/bits/libc-header-start.h \
  /usr/include/bits/floatn.h /usr/include/bits/floatn-common.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/13.1.1/include/stddef.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/13.1.1/include/stdarg.h \
  /usr/include/bits/wchar.h /usr/include/bits/types/wint_t.h \
  /usr/include/bits/types/mbstate_t.h \
  /usr/include/bits/types/__mbstate_t.h /usr/include/bits/types/__FILE.h \
  /usr/include/bits/types/FILE.h /usr/include/bits/types/locale_t.h \
  /usr/include/bits/types/__locale_t.h /usr/include/c++/13.1.1/exception \
+ /usr/include/c++/13.1.1/bits/exception.h \
  /usr/include/c++/13.1.1/bits/exception_ptr.h \
+ /usr/include/c++/13.1.1/bits/exception_defines.h \
  /usr/include/c++/13.1.1/bits/cxxabi_init_exception.h \
  /usr/include/c++/13.1.1/typeinfo \
- /usr/include/c++/13.1.1/bits/hash_bytes.h \
+ /usr/include/c++/13.1.1/bits/hash_bytes.h /usr/include/c++/13.1.1/new \
+ /usr/include/c++/13.1.1/bits/move.h /usr/include/c++/13.1.1/type_traits \
  /usr/include/c++/13.1.1/bits/nested_exception.h \
  /usr/include/c++/13.1.1/bits/char_traits.h \
  /usr/include/c++/13.1.1/bits/localefwd.h \
@@ -95,13 +62,36 @@ CMakeFiles/chat_gui.dir/Chat.cpp.o: /home/jay/projects/chat_gui/Chat.cpp \
  /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/atomic_word.h \
  /usr/include/sys/single_threaded.h \
  /usr/include/c++/13.1.1/bits/locale_classes.h \
- /usr/include/c++/13.1.1/string \
+ /usr/include/c++/13.1.1/string /usr/include/c++/13.1.1/bits/allocator.h \
+ /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/c++allocator.h \
+ /usr/include/c++/13.1.1/bits/new_allocator.h \
+ /usr/include/c++/13.1.1/bits/functexcept.h \
+ /usr/include/c++/13.1.1/bits/cpp_type_traits.h \
  /usr/include/c++/13.1.1/bits/ostream_insert.h \
  /usr/include/c++/13.1.1/bits/cxxabi_forced.h \
+ /usr/include/c++/13.1.1/bits/stl_iterator_base_funcs.h \
+ /usr/include/c++/13.1.1/bits/concept_check.h \
+ /usr/include/c++/13.1.1/debug/assertions.h \
+ /usr/include/c++/13.1.1/bits/stl_iterator_base_types.h \
+ /usr/include/c++/13.1.1/bits/stl_iterator.h \
+ /usr/include/c++/13.1.1/ext/type_traits.h \
+ /usr/include/c++/13.1.1/bits/ptr_traits.h \
  /usr/include/c++/13.1.1/bits/stl_function.h \
  /usr/include/c++/13.1.1/backward/binders.h \
- /usr/include/c++/13.1.1/bits/refwrap.h \
+ /usr/include/c++/13.1.1/ext/numeric_traits.h \
+ /usr/include/c++/13.1.1/bits/stl_algobase.h \
+ /usr/include/c++/13.1.1/bits/stl_pair.h \
+ /usr/include/c++/13.1.1/bits/utility.h \
+ /usr/include/c++/13.1.1/debug/debug.h \
+ /usr/include/c++/13.1.1/bits/predefined_ops.h \
+ /usr/include/c++/13.1.1/bit /usr/include/c++/13.1.1/bits/refwrap.h \
+ /usr/include/c++/13.1.1/bits/invoke.h \
+ /usr/include/c++/13.1.1/bits/range_access.h \
+ /usr/include/c++/13.1.1/initializer_list \
  /usr/include/c++/13.1.1/bits/basic_string.h \
+ /usr/include/c++/13.1.1/ext/alloc_traits.h \
+ /usr/include/c++/13.1.1/bits/alloc_traits.h \
+ /usr/include/c++/13.1.1/bits/stl_construct.h \
  /usr/include/c++/13.1.1/string_view \
  /usr/include/c++/13.1.1/bits/functional_hash.h \
  /usr/include/c++/13.1.1/bits/string_view.tcc \
@@ -125,6 +115,11 @@ CMakeFiles/chat_gui.dir/Chat.cpp.o: /home/jay/projects/chat_gui/Chat.cpp \
  /usr/include/bits/types/error_t.h \
  /usr/include/c++/13.1.1/bits/charconv.h \
  /usr/include/c++/13.1.1/bits/basic_string.tcc \
+ /usr/include/c++/13.1.1/bits/memory_resource.h \
+ /usr/include/c++/13.1.1/cstddef \
+ /usr/include/c++/13.1.1/bits/uses_allocator.h \
+ /usr/include/c++/13.1.1/bits/uses_allocator_args.h \
+ /usr/include/c++/13.1.1/tuple \
  /usr/include/c++/13.1.1/bits/locale_classes.tcc \
  /usr/include/c++/13.1.1/system_error \
  /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/error_constants.h \
@@ -139,16 +134,19 @@ CMakeFiles/chat_gui.dir/Chat.cpp.o: /home/jay/projects/chat_gui/Chat.cpp \
  /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/ctype_inline.h \
  /usr/include/c++/13.1.1/bits/locale_facets.tcc \
  /usr/include/c++/13.1.1/bits/basic_ios.tcc \
- /usr/include/c++/13.1.1/ostream /usr/include/c++/13.1.1/bits/ostream.tcc \
- /usr/include/c++/13.1.1/bits/istream.tcc \
+ /usr/include/c++/13.1.1/bits/ostream.tcc /usr/include/c++/13.1.1/istream \
+ /usr/include/c++/13.1.1/bits/istream.tcc /usr/include/c++/13.1.1/list \
+ /usr/include/c++/13.1.1/bits/stl_list.h \
+ /usr/include/c++/13.1.1/bits/allocated_ptr.h \
+ /usr/include/c++/13.1.1/ext/aligned_buffer.h \
+ /usr/include/c++/13.1.1/bits/list.tcc /usr/include/c++/13.1.1/fstream \
  /usr/include/c++/13.1.1/bits/codecvt.h \
  /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/basic_file.h \
  /usr/include/c++/13.1.1/x86_64-pc-linux-gnu/bits/c++io.h \
  /usr/include/c++/13.1.1/bits/fstream.tcc /usr/include/c++/13.1.1/sstream \
  /usr/include/c++/13.1.1/bits/sstream.tcc \
  /home/jay/projects/chat_gui/Message.h \
- /home/jay/projects/chat_gui/Connection.h \
- /usr/include/c++/13.1.1/iostream /usr/include/string.h \
+ /home/jay/projects/chat_gui/Connection.h /usr/include/string.h \
  /usr/include/strings.h /usr/include/c++/13.1.1/vector \
  /usr/include/c++/13.1.1/bits/stl_uninitialized.h \
  /usr/include/c++/13.1.1/bits/stl_vector.h \
