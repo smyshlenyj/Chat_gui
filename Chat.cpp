@@ -48,11 +48,11 @@ std::list<std::string> Chat::getChat(int socketID, std::string const& _sender, s
 	std::string message = "getChat\t" + _sender + "\t" + _recipient;
 	// size_t messageSize = message.size();
 	char buffer[MESSAGE_LENGTH];
-	bzero(buffer, MESSAGE_LENGTH);
-
+	memset(buffer, 0, MESSAGE_LENGTH);
+	strcpy(buffer, message.c_str());
 
 	size_t bytes = write(socketID, buffer, sizeof(buffer));
-
+	std::cout << "getChat:messagesQuantity:bytesRead: " << buffer << std::endl;
 	if (bytes == -1)
 		std::cout << "Error sending data" << std::endl;
 
