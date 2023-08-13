@@ -141,7 +141,7 @@ std::string Users::findUserNameByLogin(int socketID, const std::string& login)
 
 void Users::addUser(int socketID, User const& user)
 {
-	std::string usr = "addUser\t" + user.getLogin() + "\t" + user.getPassword() + "\t" + user.getUserName();
+	std::string usr = "addUser\t" + user.getLogin() + "\t" + user.getUserName() + "\t" + user.getPassword() ;
 	char msg[MESSAGE_LENGTH];
 	memset(msg, 0, MESSAGE_LENGTH);
 	strcpy(msg, usr.c_str());

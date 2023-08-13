@@ -434,12 +434,21 @@ int UI(int, char**)
 					showMainMenuWindow = true;
 				}
 			}
+
+			if (ImGui::Button("Exit to main menu"))
+			{
+				showUsersWindow = false;
+				showMessageWindow = false;
+				showMainMenuWindow = true;
+				usersDbIsUpToDate = false;
+				currentChatIsUpToDate = false;
+			}
+			
 			ImGui::End();
 		}
 
 		if (showUsersWindow)
 		{
-			//	std::cout << "436" << std::endl;
 			ImGui::SetNextWindowSize(usersWindowSize, ImGuiCond_None);
 			ImGui::SetNextWindowPos(topLeft, ImGuiCond_Appearing, ImVec2(0.0f, 0.0f));
 			ImGui::Begin("Users", NULL, windowFlags); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)

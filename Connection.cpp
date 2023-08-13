@@ -3,7 +3,7 @@
 Connection::Connection() = default;
 Connection::~Connection() = default;
 
-std::string serverAddress = "192.168.186.128";
+std::string serverAddress = "192.168.186.129";
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 SOCKET Connection::connectClientOpen()
