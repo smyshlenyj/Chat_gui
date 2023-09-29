@@ -23,5 +23,11 @@ void Message::sendMessage(int socketID,Logger& logger) // push message to data b
 
 	std::cout << "sendMessage:bytesSent: " << bytesSent << std::endl;
 	std::cout << "sendMessage:messageSent: " << outMessageChar << std::endl;
-	logger.writeLine("->" + this->recipient + ": " + this->message);
+	//logger.writeLine("->" + this->recipient + ": " + this->message);
+	std::string lambda = "->" + this->recipient + ": " + this->message;
+		std::thread t1 ([&] () {
+		logger.writeLine(lambda);
+		}); 
+	if(t1.joinable())	
+		t1.join();
 }

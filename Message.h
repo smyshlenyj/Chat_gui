@@ -2,6 +2,7 @@
 #include <fstream>
 #include "Connection.h"
 #include "Logger.h"
+#include <thread>
 
 struct Message
 {

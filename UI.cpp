@@ -221,7 +221,12 @@ int UI(int, char**)
 
 				if (ImGui::Button("Back to messages")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					//logger.writeLine("Button \"Back to messages\" was pressed");+
+					std::thread t2 ([&] () {
 					logger.writeLine("Button \"Back to messages\" was pressed");
+					}); 
+					if(t2.joinable())	
+						t2.join();
 					showSignInWindow = false;
 					showMainMenuWindow = false;
 					showUsersWindow = true;
@@ -230,7 +235,13 @@ int UI(int, char**)
 
 				if (ImGui::Button("Sign out")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					//logger.writeLine("Button \"Sign out\" was pressed");
+
+					std::thread t3 ([&] () {
 					logger.writeLine("Button \"Sign out\" was pressed");
+					}); 
+					if(t3.joinable())	
+						t3.join();
 					loggedIn = false;
 					showSignInWindow = false;
 					showMainMenuWindow = true;
@@ -246,7 +257,12 @@ int UI(int, char**)
 
 				if (ImGui::Button("Sign in")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					//logger.writeLine("Button \"Sign in\" was pressed");
+					std::thread t4 ([&] () {
 					logger.writeLine("Button \"Sign in\" was pressed");
+					}); 
+					if(t4.joinable())	
+						t4.join();
 					usersDB.refresh(socketID);
 					showSignInWindow = true;
 					showMainMenuWindow = false;
@@ -254,7 +270,13 @@ int UI(int, char**)
 
 				if (ImGui::Button("Sign up")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					//logger.writeLine("Button \"Sign up\" was pressed");
+					std::thread t5 ([&] () {
 					logger.writeLine("Button \"Sign up\" was pressed");
+					}); 
+					if(t5.joinable())	
+						t5.join();
+
 					showSignUpWindow = true;
 					showMainMenuWindow = false;
 				}
@@ -281,7 +303,14 @@ int UI(int, char**)
 
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
+				//logger.writeLine("Warning popup window / signUp");
+				std::thread t5 ([&] () {
 				logger.writeLine("Warning popup window / signUp");
+				}); 
+				if(t5.joinable())	
+					t5.join();	
+
+
 				if (strcmp(login, "_all") == 0)
 					ImGui::Text("Please don't use \"_all\" as login, it is hardcoded!");
 				if (strcmp(password, "") == 0)
@@ -326,7 +355,13 @@ int UI(int, char**)
 
 			if (ImGui::Button("Create user"))
 			{
+				//logger.writeLine("Button \"Create user\" was pressed");
+				std::thread t6 ([&] () {
 				logger.writeLine("Button \"Create user\" was pressed");
+				}); 
+				if(t6.joinable())	
+					t6.join();
+
 				if (strcmp(login, "_all") == 0 ||
 					strcmp(login, "") == 0 ||
 					strcmp(password, "") == 0 ||
