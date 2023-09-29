@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
 #include "Connection.h"
+#include "Logger.h"
 
 struct Message
 {
@@ -10,5 +11,5 @@ private:
 public:
 	Message(std::string const&, std::string const&, std::string const&);
 
-	void sendMessage(int); // push message to data base
+	void sendMessage(int, Logger&); // push message to data base
 };

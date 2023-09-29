@@ -4,7 +4,7 @@
 
 Message::Message(std::string const& _sender, std::string const& _recipient, std::string const& _message) : sender(_sender), recipient(_recipient), message(_message) {}
 
-void Message::sendMessage(int socketID) // push message to data base
+void Message::sendMessage(int socketID,Logger& logger) // push message to data base
 {
 	std::string outMessage = "sendMessage\t" + this->sender + "\t" + this->recipient + "\t" + this->message;
 
@@ -23,4 +23,5 @@ void Message::sendMessage(int socketID) // push message to data base
 
 	std::cout << "sendMessage:bytesSent: " << bytesSent << std::endl;
 	std::cout << "sendMessage:messageSent: " << outMessageChar << std::endl;
+	logger.writeLine("->" + this->recipient + ": " + this->message);
 }

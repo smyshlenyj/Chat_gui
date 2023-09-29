@@ -4,7 +4,7 @@ project(chat_gui VERSION 0.1.0 LANGUAGES C CXX)
 include(CTest)
 enable_testing()
 
-add_executable(chat_gui main.cpp Chat.cpp LoadImage.cpp Message.cpp SHA256.cpp UI.cpp User.cpp Users.cpp Connection.cpp 
+add_executable(chat_gui main.cpp Chat.cpp LoadImage.cpp Message.cpp SHA256.cpp UI.cpp User.cpp Users.cpp Connection.cpp Logger.cpp
 imgui.cpp imgui_demo.cpp imgui_draw.cpp imgui_tables.cpp imgui_widgets.cpp imgui_impl_glfw.cpp imgui_impl_opengl3.cpp)
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)

@@ -64,7 +64,7 @@ std::list<std::string> Chat::getChat(int socketID, std::string const& _sender, s
 	std::cout << "Reply from server getChat:messagesQuantity: " << messagesQuantity << std::endl;
 	std::list<std::string> messages;
 
-	for (int i = 0; i < messagesQuantity; ++i)
+	for (size_t i = 0; i < messagesQuantity; ++i)
 	{
 		char messageFromServer[MESSAGE_LENGTH];
 		bzero(messageFromServer, MESSAGE_LENGTH);

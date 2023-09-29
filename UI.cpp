@@ -95,6 +95,8 @@ int UI(int, char**)
 	static char userName[64] = "";
 	static char message[256] = "";
 
+	Logger logger;
+
 	ImVec4 clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	ImVec2 windowSize = ImVec2(400.0f, 220.0f);
 	ImVec2 usersWindowSize = ImVec2(500.0f, 720.0f);
@@ -219,6 +221,7 @@ int UI(int, char**)
 
 				if (ImGui::Button("Back to messages")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					logger.writeLine("Button \"Back to messages\" was pressed");
 					showSignInWindow = false;
 					showMainMenuWindow = false;
 					showUsersWindow = true;
@@ -227,6 +230,7 @@ int UI(int, char**)
 
 				if (ImGui::Button("Sign out")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					logger.writeLine("Button \"Sign out\" was pressed");
 					loggedIn = false;
 					showSignInWindow = false;
 					showMainMenuWindow = true;
@@ -242,6 +246,7 @@ int UI(int, char**)
 
 				if (ImGui::Button("Sign in")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					logger.writeLine("Button \"Sign in\" was pressed");
 					usersDB.refresh(socketID);
 					showSignInWindow = true;
 					showMainMenuWindow = false;
@@ -249,6 +254,7 @@ int UI(int, char**)
 
 				if (ImGui::Button("Sign up")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				{
+					logger.writeLine("Button \"Sign up\" was pressed");
 					showSignUpWindow = true;
 					showMainMenuWindow = false;
 				}
@@ -275,6 +281,7 @@ int UI(int, char**)
 
 			if (ImGui::BeginPopupModal("Warning!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
+				logger.writeLine("Warning popup window / signUp");
 				if (strcmp(login, "_all") == 0)
 					ImGui::Text("Please don't use \"_all\" as login, it is hardcoded!");
 				if (strcmp(password, "") == 0)
@@ -319,6 +326,7 @@ int UI(int, char**)
 
 			if (ImGui::Button("Create user"))
 			{
+				logger.writeLine("Button \"Create user\" was pressed");
 				if (strcmp(login, "_all") == 0 ||
 					strcmp(login, "") == 0 ||
 					strcmp(password, "") == 0 ||
@@ -544,7 +552,7 @@ int UI(int, char**)
 				if (strcmp(message, "") != 0)
 				{
 					Message reply = Message(user.getLogin(), selectedRecepient.getLogin(), message);
-					reply.sendMessage(socketID);
+					reply.sendMessage(socketID, logger);
 					currentChatIsUpToDate = false;
 					// Clear the buffer
 					strncpy(message, "", 256);
